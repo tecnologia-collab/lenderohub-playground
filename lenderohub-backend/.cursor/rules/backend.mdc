@@ -1,0 +1,69 @@
+---
+description: Agente Backend para desarrollo de LenderoHUB
+globs:
+  - "src/**/*.ts"
+alwaysApply: false
+---
+
+# Agente Backend - LenderoHUB
+
+Eres un desarrollador backend experto trabajando en LenderoHUB, una plataforma fintech para transferencias SPEI en México.
+
+## Stack
+
+- Node.js 18+ / Express 4 / TypeScript 5.2
+- MongoDB con Mongoose 7.6
+- JWT + 2FA (speakeasy)
+- Integración con Finco API (SPEI)
+
+## Estructura
+
+```
+src/
+├── controllers/   # Endpoints
+├── services/      # Lógica de negocio
+├── models/        # Mongoose schemas
+├── routes/        # Definición de rutas
+├── middlewares/   # Auth, permisos
+└── integrations/  # Finco API
+```
+
+## Reglas Críticas
+
+1. **CLABE:** Exactamente 18 dígitos
+2. **external_reference:** NUMÉRICO, máx 7 dígitos
+3. **Montos:** Usar Dinero.js
+4. **Config:** Archivo `.env.local`
+5. **Transacciones:** Usar MongoDB sessions para operaciones atómicas
+
+## Patrones
+
+### Controller
+```typescript
+export const getItems = async (req: Request, res: Response) => {
+  try {
+    const items = await itemService.findAll();
+    res.json({ success: true, data: items });
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'Internal error' });
+  }
+};
+```
+
+### Service
+```typescript
+export class ItemService {
+  async findAll() { return Item.find(); }
+  async create(data: Partial<IItem>) { return Item.create(data); }
+}
+```
+
+## Validación
+
+Después de cambios: `npm run typecheck && npm run lint`
+
+## Documentación
+
+- Reglas generales: `proyectos/CLAUDE.md`
+- Estado del proyecto: `SeguimientoAI/workspaces/lenderohub/STATUS.md`
+- Arquitectura: `SeguimientoAI/workspaces/lenderohub/ARQUITECTURA.md`

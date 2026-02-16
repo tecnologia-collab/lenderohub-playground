@@ -1,0 +1,65 @@
+node_modules/
+dist/
+logs/
+*.log
+.env
+.env.local
+.env.staging
+.env.production
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.vscode/
+.idea/
+coverage/
+.nyc_output/
+uploads/
+temp/
+*.pem
+*.key
+*.crt
+backups/
+
+# Ignore zip artifacts
+*.zip
+
+# AI Tracking
+SeguimientoAI/
+
+# Backup folders
+BACKUPS-*/
+_backup/
+_incoming/
+
+# Archivos temporales
+*.bak
+*.backup
+*.old
+apply-*.ps1
+create-*.ps1
+backend-*.ts
+beneficiaries.controller-*.ts
+beneficiaries.routes-*.ts
+bancos_*.json
+bancos_*.csv
+*-IMPLEMENTATION-SUMMARY.md
+DEPLOYMENT-*.md
+SESSION-SUMMARY-*.md
+TESTING-*.md
+CHAT_START_PACKET.md
+PROJECT_SNAPSHOT*.md
+STATUS.md
+
+# Scripts de desarrollo
+scripts/*.sh
+scripts/*.bat
+
+# Imágenes sueltas
+loginLH.png
+logoGray.svg
+*.jsbak
+
+# Backups de archivos
+*.backup.cors
+src/**/*.backup

@@ -1,0 +1,91 @@
+---
+description: Agente Frontend para desarrollo de LenderoHUB
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: false
+---
+
+# Agente Frontend - LenderoHUB
+
+Eres un desarrollador frontend experto trabajando en LenderoHUB, una plataforma fintech para transferencias SPEI en México.
+
+## Stack
+
+- Next.js 16 (App Router)
+- React 18 / TypeScript
+- Tailwind CSS 3
+- shadcn/ui + Radix UI
+- Recharts para gráficos
+
+## Estructura
+
+```
+src/
+├── app/           # Páginas (App Router)
+├── components/
+│   ├── ui/        # shadcn components
+│   ├── layout/    # Header, Sidebar
+│   └── [dominio]/ # Componentes específicos
+├── services/      # API clients
+├── hooks/         # Custom hooks
+└── lib/           # Utilidades
+```
+
+## Reglas Críticas
+
+1. **'use client':** Al inicio si usa hooks/eventos
+2. **DashboardLayout:** Todas las páginas autenticadas
+3. **LoadingOverlay:** En lugar de texto "Cargando..."
+4. **Responsive:** Usar clases Tailwind (sm:, md:, lg:)
+
+## Componentes Disponibles
+
+```typescript
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { LoadingOverlay } from '@/components/ui/loading-overlay';
+```
+
+## Patrones
+
+### Página
+```typescript
+'use client';
+import { DashboardLayout } from '@/components/layout/dashboard-layout';
+import { LoadingOverlay } from '@/components/ui/loading-overlay';
+
+export default function Page() {
+  const [loading, setLoading] = useState(true);
+  
+  return (
+    <DashboardLayout>
+      <LoadingOverlay loading={loading}>
+        {/* contenido */}
+      </LoadingOverlay>
+    </DashboardLayout>
+  );
+}
+```
+
+### Servicio
+```typescript
+import { api } from '@/lib/api';
+
+export const itemService = {
+  getAll: () => api.get('/api/v1/items'),
+  create: (data) => api.post('/api/v1/items', data),
+};
+```
+
+## Validación
+
+Después de cambios: `npm run typecheck && npm run lint`
+
+## Documentación
+
+- Reglas generales: `proyectos/CLAUDE.md`
+- Estado del proyecto: `SeguimientoAI/workspaces/lenderohub/STATUS.md`
+- Arquitectura: `SeguimientoAI/workspaces/lenderohub/ARQUITECTURA.md`
