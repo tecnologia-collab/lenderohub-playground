@@ -14,8 +14,8 @@ La comunicacion frontend-backend es el corazon de toda aplicacion web. Este ejer
 ## Instrucciones
 1. Crea un service: `lenderohub-frontend/src/services/playground.service.ts`
    - Funcion `getHealthStatus()` → llama a `/api/health`
-   - Funcion `getMockBalance()` → llama a `/api/mock-finco/accounts/mock-001/balance`
-   - Funcion `getMockInstruments()` → llama a `/api/mock-finco/instruments`
+   - Funcion `getMockBalance()` → llama a `/api/v1/mock-finco/accounts/mock-001/balance`
+   - Funcion `getMockInstruments()` → llama a `/api/v1/mock-finco/instruments`
 2. Crea la pagina: `lenderohub-frontend/src/app/playground/api-demo/page.tsx`
 3. La pagina debe mostrar:
    - **Card 1:** Status del API (health check) con indicador verde/rojo

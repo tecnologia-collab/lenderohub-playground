@@ -48,7 +48,7 @@ cd lenderohub-frontend && npm run dev   # Puerto 3001
 
 ### Mock Finco API
 
-La API mock de Finco esta disponible en `http://localhost:3000/api/mock-finco/`:
+La API mock de Finco esta disponible en `http://localhost:3000/api/v1/mock-finco/`:
 - `GET /instruments` — lista beneficiarios mock
 - `POST /transfers` — crear transferencia mock
 - `GET /accounts/:id/balance` — balance mock (500,000 MXN)

@@ -5,7 +5,7 @@ const nextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: 'https://api-hubstg.lenderocapital.com/api/:path*',
+        destination: 'http://localhost:3000/api/:path*',
       },
     ];
   },

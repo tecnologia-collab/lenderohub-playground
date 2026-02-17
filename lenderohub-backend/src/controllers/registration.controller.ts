@@ -15,7 +15,7 @@ const submitRequestSchema = z.object({
     .max(13, 'RFC debe tener entre 10 y 13 caracteres')
     .regex(/^[A-Za-z0-9]+$/, 'RFC solo puede contener letras y numeros'),
   businessType: z.nativeEnum(BusinessType, {
-    errorMap: () => ({ message: 'Tipo de empresa invalido' })
+    error: 'Tipo de empresa invalido'
   }),
   firstName: z.string().min(2, 'Nombre debe tener al menos 2 caracteres').max(100),
   lastName: z.string().min(2, 'Apellido paterno debe tener al menos 2 caracteres').max(100),
@@ -29,7 +29,7 @@ const submitRequestSchema = z.object({
 
 const reviewRequestSchema = z.object({
   status: z.enum(['approved', 'rejected'], {
-    errorMap: () => ({ message: 'Status debe ser "approved" o "rejected"' })
+    error: 'Status debe ser "approved" o "rejected"'
   }),
   reviewNotes: z.string().max(1000).optional(),
 });
@@ -42,11 +42,11 @@ export const submitRequest = async (req: Request, res: Response, next: NextFunct
     // Validate input
     const parsed = submitRequestSchema.safeParse(req.body);
     if (!parsed.success) {
-      const firstError = parsed.error.errors[0];
+      const firstIssue = parsed.error.issues[0];
       res.status(400).json({
         success: false,
-        message: firstError.message,
-        errors: parsed.error.errors.map(e => ({
+        message: firstIssue.message,
+        errors: parsed.error.issues.map((e: z.ZodIssue) => ({
           field: e.path.join('.'),
           message: e.message
         }))
@@ -199,10 +199,10 @@ export const reviewRequest = async (req: AuthRequest, res: Response, next: NextF
     // Validate input
     const parsed = reviewRequestSchema.safeParse(req.body);
     if (!parsed.success) {
-      const firstError = parsed.error.errors[0];
+      const firstIssue = parsed.error.issues[0];
       res.status(400).json({
         success: false,
-        message: firstError.message
+        message: firstIssue.message
       });
       return;
     }
