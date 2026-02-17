@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LenderoHUB Playground — Guia de Training Full-Stack</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+    :root {
+      --primary: #1a1a2e;
+      --accent: #e94560;
+      --accent-light: #ff6b6b;
+      --bg: #ffffff;
+      --bg-alt: #f8f9fb;
+      --bg-code: #1e1e2e;
+      --text: #2d3436;
+      --text-light: #636e72;
+      --border: #e0e0e0;
+      --green: #00b894;
+      --blue: #0984e3;
+      --orange: #f39c12;
+      --purple: #6c5ce7;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 14px;
+      background: var(--bg);
+    }
+
+    @media print {
+      body { font-size: 11px; line-height: 1.5; }
+      .page-break { page-break-before: always; }
+      .no-print { display: none; }
+      .cover { height: 100vh; }
+      section { page-break-inside: avoid; }
+      h2 { page-break-after: avoid; }
+    }
+
+    /* Cover */
+    .cover {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, var(--primary) 0%, #16213e 50%, #0f3460 100%);
+      color: white;
+      text-align: center;
+      padding: 60px 40px;
+    }
+
+    .cover h1 {
+      font-size: 3em;
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 12px;
+    }
+
+    .cover .subtitle {
+      font-size: 1.3em;
+      font-weight: 300;
+      opacity: 0.85;
+      margin-bottom: 40px;
+    }
+
+    .cover .badge {
+      display: inline-block;
+      background: var(--accent);
+      color: white;
+      padding: 8px 24px;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 0.95em;
+      margin-bottom: 50px;
+    }
+
+    .cover .meta {
+      font-size: 0.85em;
+      opacity: 0.6;
+      margin-top: 40px;
+    }
+
+    .cover .stack-pills {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .cover .stack-pills span {
+      background: rgba(255,255,255,0.12);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.85em;
+      font-weight: 500;
+    }
+
+    /* Content */
+    .content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 60px 40px;
+    }
+
+    h2 {
+      font-size: 1.6em;
+      font-weight: 700;
+      color: var(--primary);
+      margin-top: 50px;
+      margin-bottom: 20px;
+      padding-bottom: 8px;
+      border-bottom: 3px solid var(--accent);
+      display: inline-block;
+    }
+
+    h2::before {
+      content: '';
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    h3 {
+      font-size: 1.15em;
+      font-weight: 600;
+      color: var(--primary);
+      margin-top: 28px;
+      margin-bottom: 10px;
+    }
+
+    p { margin-bottom: 12px; }
+
+    ul, ol {
+      margin-bottom: 16px;
+      padding-left: 24px;
+    }
+
+    li { margin-bottom: 6px; }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      background: var(--bg-alt);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9em;
+      color: var(--accent);
+    }
+
+    pre {
+      background: var(--bg-code);
+      color: #cdd6f4;
+      padding: 16px 20px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 12px 0 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85em;
+      line-height: 1.6;
+    }
+
+    pre code {
+      background: none;
+      color: inherit;
+      padding: 0;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 24px;
+      font-size: 0.92em;
+    }
+
+    th {
+      background: var(--primary);
+      color: white;
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 600;
+    }
+
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    tr:nth-child(even) td { background: var(--bg-alt); }
+
+    /* Cards */
+    .card {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin: 16px 0;
+    }
+
+    .card.warning {
+      border-left: 4px solid var(--orange);
+      background: #fff9e6;
+    }
+
+    .card.info {
+      border-left: 4px solid var(--blue);
+      background: #e8f4fd;
+    }
+
+    .card.success {
+      border-left: 4px solid var(--green);
+      background: #e6fff5;
+    }
+
+    .card .card-title {
+      font-weight: 700;
+      font-size: 1em;
+      margin-bottom: 6px;
+    }
+
+    /* Level cards */
+    .level-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 20px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .level-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 5px;
+    }
+
+    .level-card.l0::before { background: var(--green); }
+    .level-card.l1::before { background: var(--blue); }
+    .level-card.l2::before { background: var(--purple); }
+    .level-card.l3::before { background: var(--orange); }
+    .level-card.l4::before { background: var(--accent); }
+    .level-card.l5::before { background: var(--primary); }
+
+    .level-card .level-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .level-card .level-num {
+      font-size: 0.8em;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .l0 .level-num { color: var(--green); }
+    .l1 .level-num { color: var(--blue); }
+    .l2 .level-num { color: var(--purple); }
+    .l3 .level-num { color: var(--orange); }
+    .l4 .level-num { color: var(--accent); }
+    .l5 .level-num { color: var(--primary); }
+
+    .level-card .level-title {
+      font-size: 1.2em;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .level-card .hours {
+      font-size: 0.85em;
+      color: var(--text-light);
+      background: var(--bg-alt);
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    .level-card .exercises {
+      list-style: none;
+      padding: 0;
+    }
+
+    .level-card .exercises li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .level-card .exercises li:last-child { border-bottom: none; }
+
+    .level-card .exercises .ex-num {
+      background: var(--bg-alt);
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8em;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .checkbox {
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--border);
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    /* Checklist */
+    .checklist {
+      list-style: none;
+      padding: 0;
+    }
+
+    .checklist li {
+      padding: 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .checklist li::before {
+      content: '';
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--border);
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    /* Flow */
+    .flow-diagram {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 16px 0 24px;
+      font-size: 0.9em;
+    }
+
+    .flow-step {
+      background: var(--primary);
+      color: white;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-weight: 500;
+    }
+
+    .flow-arrow { color: var(--accent); font-weight: bold; }
+
+    /* TOC */
+    .toc {
+      background: var(--bg-alt);
+      border-radius: 12px;
+      padding: 30px;
+      margin: 30px 0;
+    }
+
+    .toc h3 {
+      margin-top: 0;
+      margin-bottom: 16px;
+    }
+
+    .toc ol {
+      padding-left: 20px;
+    }
+
+    .toc li {
+      margin-bottom: 8px;
+    }
+
+    .toc a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .toc a:hover { color: var(--accent); }
+
+    /* Two column */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 16px 0;
+    }
+
+    @media (max-width: 600px) {
+      .two-col { grid-template-columns: 1fr; }
+    }
+
+    .tool-card {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    .tool-card .tool-name {
+      font-weight: 700;
+      font-size: 1.1em;
+      margin-bottom: 4px;
+    }
+
+    .tool-card .tool-desc {
+      color: var(--text-light);
+      font-size: 0.9em;
+      margin-bottom: 12px;
+    }
+
+    .tool-card .best-for {
+      font-size: 0.85em;
+      font-weight: 600;
+      color: var(--green);
+      margin-bottom: 6px;
+    }
+
+    .footer {
+      text-align: center;
+      color: var(--text-light);
+      font-size: 0.85em;
+      margin-top: 60px;
+      padding: 30px 0;
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+
+<!-- COVER PAGE -->
+<div class="cover">
+  <div class="badge">Programa de Training 2026</div>
+  <h1>LenderoHUB Playground</h1>
+  <p class="subtitle">Guia de Training Full-Stack</p>
+  <div class="stack-pills">
+    <span>Express</span>
+    <span>TypeScript</span>
+    <span>Next.js</span>
+    <span>MongoDB</span>
+    <span>Tailwind</span>
+    <span>Claude Code</span>
+    <span>Cursor</span>
+  </div>
+  <p class="meta">LenderoCapital &mdash; Febrero 2026</p>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <div class="toc">
+    <h3>Contenido</h3>
+    <ol>
+      <li><a href="#prereqs">Que necesitas antes de empezar</a></li>
+      <li><a href="#setup">Setup paso a paso</a></li>
+      <li><a href="#verify">Verificar que todo funciona</a></li>
+      <li><a href="#stack">Stack tecnologico</a></li>
+      <li><a href="#tools">Herramientas AI</a></li>
+      <li><a href="#exercises">Mapa de ejercicios</a></li>
+      <li><a href="#workflow">Como trabajar cada ejercicio</a></li>
+      <li><a href="#tips">Tips y mejores practicas</a></li>
+      <li><a href="#troubleshooting">Problemas comunes</a></li>
+      <li><a href="#ref">Referencia rapida</a></li>
+    </ol>
+  </div>
+
+  <!-- 1. PREREQUISITES -->
+  <div class="page-break"></div>
+  <h2 id="prereqs">1. Que necesitas antes de empezar</h2>
+
+  <h3>Cuentas</h3>
+  <table>
+    <tr><th>Cuenta</th><th>URL</th><th>Accion</th></tr>
+    <tr><td><strong>GitHub</strong></td><td>github.com</td><td>Crea cuenta y envia tu username al equipo para recibir invitacion</td></tr>
+    <tr><td><strong>Anthropic</strong></td><td>console.anthropic.com</td><td>Para Claude Code. Pide tu API key al equipo.</td></tr>
+    <tr><td><strong>Cursor</strong></td><td>cursor.com</td><td>Descarga la version gratuita</td></tr>
+  </table>
+
+  <h3>Software a instalar</h3>
+  <table>
+    <tr><th>Software</th><th>Version</th><th>Descarga</th></tr>
+    <tr><td><strong>Node.js</strong></td><td>18 o superior (LTS)</td><td>nodejs.org</td></tr>
+    <tr><td><strong>Git</strong></td><td>Cualquier version reciente</td><td>git-scm.com</td></tr>
+    <tr><td><strong>MongoDB</strong></td><td>7.x</td><td>mongodb.com/try/download/community</td></tr>
+    <tr><td><strong>Docker</strong> (alternativa a MongoDB)</td><td>Desktop</td><td>docker.com/products/docker-desktop</td></tr>
+    <tr><td><strong>VS Code</strong></td><td>Ultima version</td><td>code.visualstudio.com</td></tr>
+    <tr><td><strong>Cursor</strong></td><td>Ultima version</td><td>cursor.com</td></tr>
+  </table>
+
+  <h3>Extensiones de VS Code</h3>
+  <ul>
+    <li><strong>ESLint</strong> &mdash; deteccion de errores en JS/TS</li>
+    <li><strong>Prettier</strong> &mdash; formateo automatico de codigo</li>
+    <li><strong>Tailwind CSS IntelliSense</strong> &mdash; autocomplete para clases CSS</li>
+    <li><strong>MongoDB for VS Code</strong> &mdash; explorar la base de datos (opcional)</li>
+  </ul>
+
+  <!-- 2. SETUP -->
+  <div class="page-break"></div>
+  <h2 id="setup">2. Setup paso a paso</h2>
+
+  <h3>2.1 Instalar Claude Code CLI</h3>
+  <pre><code>npm install -g @anthropic-ai/claude-code
+claude --version   # Debe mostrar un numero de version</code></pre>
+  <p>La primera vez que ejecutes <code>claude</code> te pedira la API key de Anthropic.</p>
+
+  <h3>2.2 Clonar repositorios</h3>
+  <pre><code># Repo principal (donde trabajaras)
+git clone https://github.com/LenderoCapital/lenderohub-playground.git
+
+# Repo de referencia (solo lectura, para ejercicio avanzado L4.2)
+git clone https://github.com/LenderoCapital/lenderomo-playground.git</code></pre>
+
+  <div class="card warning">
+    <div class="card-title">Si git clone falla con "repository not found"</div>
+    <p>Aun no tienes acceso. Envia tu username de GitHub al equipo y espera la invitacion.</p>
+  </div>
+
+  <h3>2.3 Setup Backend</h3>
+  <pre><code>cd lenderohub-playground/lenderohub-backend
+cp .env.local.example .env.local
+npm install
+npm run seed:playground</code></pre>
+  <p>El seed crea 3 usuarios de prueba en la base de datos local.</p>
+
+  <h3>2.4 Setup Frontend</h3>
+  <pre><code>cd ../lenderohub-frontend
+cp .env.local.example .env.local
+npm install</code></pre>
+
+  <h3>2.5 MongoDB con Docker (si no lo instalaste directamente)</h3>
+  <pre><code>docker run -d -p 27017:27017 --name mongodb mongo:7</code></pre>
+  <p>Despues del seed, verifica: <code>docker exec mongodb mongosh --eval "db.getSiblingDB('lenderohub-playground').users.countDocuments()"</code> &mdash; debe devolver <code>3</code>.</p>
+
+  <!-- 3. VERIFY -->
+  <div class="page-break"></div>
+  <h2 id="verify">3. Verificar que todo funciona</h2>
+
+  <p>Abre <strong>2 terminales</strong> y ejecuta:</p>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">Terminal 1 &mdash; Backend</div>
+      <pre><code>cd lenderohub-backend
+npm run dev</code></pre>
+      <p>Debe decir "Servidor listo" en puerto 3000</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Terminal 2 &mdash; Frontend</div>
+      <pre><code>cd lenderohub-frontend
+npm run dev</code></pre>
+      <p>Debe decir "Ready" en puerto 3001</p>
+    </div>
+  </div>
+
+  <h3>Checklist de verificacion</h3>
+  <ul class="checklist">
+    <li><code>http://localhost:3000/api/health</code> responde OK</li>
+    <li><code>http://localhost:3001</code> carga la pagina de login</li>
+    <li>Login con <code>admin@playground.local</code> / <code>playground123</code> funciona</li>
+    <li><code>claude --version</code> responde</li>
+    <li>Cursor IDE abre el proyecto sin errores</li>
+  </ul>
+
+  <div class="card success">
+    <div class="card-title">Si todo esta bien</div>
+    <p>Ya puedes empezar con los ejercicios. Abre <code>playground/level-0/01-environment-setup.md</code></p>
+  </div>
+
+  <!-- 4. STACK -->
+  <div class="page-break"></div>
+  <h2 id="stack">4. Stack tecnologico</h2>
+
+  <p>Este es un proyecto full-stack real. Estas son las tecnologias que usaras:</p>
+
+  <table>
+    <tr><th>Capa</th><th>Tecnologia</th><th>Para que</th></tr>
+    <tr><td>Backend</td><td><strong>Express + TypeScript</strong></td><td>API REST, logica de negocio</td></tr>
+    <tr><td>Base de datos</td><td><strong>MongoDB + Mongoose</strong></td><td>Almacenamiento de datos, modelos</td></tr>
+    <tr><td>Frontend</td><td><strong>Next.js 16 (App Router)</strong></td><td>Paginas, navegacion, SSR</td></tr>
+    <tr><td>Estilos</td><td><strong>Tailwind CSS + shadcn/ui</strong></td><td>Diseno, componentes UI</td></tr>
+    <tr><td>Validacion</td><td><strong>Zod</strong></td><td>Validacion de datos en backend y frontend</td></tr>
+    <tr><td>Auth</td><td><strong>JWT</strong></td><td>Tokens de acceso y refresh</td></tr>
+  </table>
+
+  <h3>Flujo de una request</h3>
+  <div class="flow-diagram">
+    <span class="flow-step">Browser</span>
+    <span class="flow-arrow">&rarr;</span>
+    <span class="flow-step">Next.js Page</span>
+    <span class="flow-arrow">&rarr;</span>
+    <span class="flow-step">Service</span>
+    <span class="flow-arrow">&rarr;</span>
+    <span class="flow-step">Express API</span>
+    <span class="flow-arrow">&rarr;</span>
+    <span class="flow-step">Controller</span>
+    <span class="flow-arrow">&rarr;</span>
+    <span class="flow-step">Model</span>
+    <span class="flow-arrow">&rarr;</span>
+    <span class="flow-step">MongoDB</span>
+  </div>
+
+  <!-- 5. TOOLS -->
+  <h2 id="tools">5. Herramientas AI</h2>
+
+  <p>Usaras dos herramientas AI complementarias. Cada una es mejor para tareas distintas:</p>
+
+  <div class="two-col">
+    <div class="tool-card">
+      <div class="tool-name">Claude Code</div>
+      <div class="tool-desc">AI en la terminal que lee, escribe y ejecuta</div>
+      <div class="best-for">Mejor para:</div>
+      <ul>
+        <li>Explorar el codebase completo</li>
+        <li>Crear features multi-archivo</li>
+        <li>Debugging (lee logs, ejecuta tests)</li>
+        <li>Git operations (commits, branches)</li>
+        <li>Code review</li>
+      </ul>
+    </div>
+    <div class="tool-card">
+      <div class="tool-name">Cursor</div>
+      <div class="tool-desc">IDE con AI integrado (fork de VS Code)</div>
+      <div class="best-for">Mejor para:</div>
+      <ul>
+        <li>Editar codigo inline (Cmd+K)</li>
+        <li>Autocompletado en tiempo real (Tab)</li>
+        <li>Preguntas sobre el archivo abierto</li>
+        <li>Cambios pequenos y precisos</li>
+        <li>Navegacion visual del codigo</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card info">
+    <div class="card-title">Regla de oro</div>
+    <p><strong>No copies y pegues codigo de AI sin entenderlo.</strong> Lee cada linea. Si algo no tiene sentido, preguntale al AI por que lo hizo asi. Aprende de los errores del AI tanto como de los aciertos.</p>
+  </div>
+
+  <!-- 6. EXERCISES -->
+  <div class="page-break"></div>
+  <h2 id="exercises">6. Mapa de ejercicios</h2>
+
+  <p>19 ejercicios organizados en 6 niveles. Tiempo estimado total: <strong>80-105 horas</strong>.</p>
+
+  <div class="level-card l0">
+    <div class="level-header">
+      <div>
+        <div class="level-num">Level 0</div>
+        <div class="level-title">Foundations</div>
+      </div>
+      <div class="hours">6-8 horas</div>
+    </div>
+    <p style="color:var(--text-light);margin-bottom:12px">Setup, exploracion y primeros pasos con herramientas AI.</p>
+    <ul class="exercises">
+      <li><span class="ex-num">0.1</span> <strong>Environment Setup</strong> &mdash; instalar todo y verificar</li>
+      <li><span class="ex-num">0.2</span> <strong>First Run</strong> &mdash; explorar la app corriendo, DevTools, curl</li>
+      <li><span class="ex-num">0.3</span> <strong>Codebase Tour</strong> &mdash; mapear la arquitectura backend + frontend</li>
+      <li><span class="ex-num">0.4</span> <strong>AI Tool Comparison</strong> &mdash; Claude Code vs Cursor, cuando usar cada uno</li>
+    </ul>
+  </div>
+
+  <div class="level-card l1">
+    <div class="level-header">
+      <div>
+        <div class="level-num">Level 1</div>
+        <div class="level-title">Frontend Basics</div>
+      </div>
+      <div class="hours">12-16 horas</div>
+    </div>
+    <p style="color:var(--text-light);margin-bottom:12px">Componentes React, tablas, formularios y llamadas API.</p>
+    <ul class="exercises">
+      <li><span class="ex-num">1.1</span> <strong>Static Alert Card</strong> &mdash; crear un componente de alerta reutilizable</li>
+      <li><span class="ex-num">1.2</span> <strong>Data Table</strong> &mdash; tabla con sort, filter y paginacion</li>
+      <li><span class="ex-num">1.3</span> <strong>Form Validation</strong> &mdash; formulario con validacion Zod</li>
+      <li><span class="ex-num">1.4</span> <strong>API Call Display</strong> &mdash; consumir API mock, loading/error states</li>
+    </ul>
+  </div>
+
+  <div class="level-card l2">
+    <div class="level-header">
+      <div>
+        <div class="level-num">Level 2</div>
+        <div class="level-title">Backend Basics</div>
+      </div>
+      <div class="hours">12-16 horas</div>
+    </div>
+    <p style="color:var(--text-light);margin-bottom:12px">Endpoints, modelos MongoDB, CRUD y middleware de permisos.</p>
+    <ul class="exercises">
+      <li><span class="ex-num">2.1</span> <strong>Health Endpoint</strong> &mdash; crear endpoint detallado de health</li>
+      <li><span class="ex-num">2.2</span> <strong>Mongoose Model</strong> &mdash; definir un modelo con validacion y indices</li>
+      <li><span class="ex-num">2.3</span> <strong>CRUD Controller</strong> &mdash; controller completo con paginacion</li>
+      <li><span class="ex-num">2.4</span> <strong>Permissions Middleware</strong> &mdash; middleware de autorizacion por rol</li>
+    </ul>
+  </div>
+
+  <div class="level-card l3">
+    <div class="level-header">
+      <div>
+        <div class="level-num">Level 3</div>
+        <div class="level-title">Full-Stack Features</div>
+      </div>
+      <div class="hours">15-20 horas</div>
+    </div>
+    <p style="color:var(--text-light);margin-bottom:12px">Features completas que conectan frontend + backend + base de datos.</p>
+    <ul class="exercises">
+      <li><span class="ex-num">3.1</span> <strong>Notifications UI + Backend</strong> &mdash; sistema de notificaciones end-to-end</li>
+      <li><span class="ex-num">3.2</span> <strong>Activity Log</strong> &mdash; log de actividad con filtros y timeline</li>
+      <li><span class="ex-num">3.3</span> <strong>Dashboard Widget</strong> &mdash; widget con datos en tiempo real</li>
+    </ul>
+  </div>
+
+  <div class="level-card l4">
+    <div class="level-header">
+      <div>
+        <div class="level-num">Level 4</div>
+        <div class="level-title">Advanced Patterns</div>
+      </div>
+      <div class="hours">20-25 horas</div>
+    </div>
+    <p style="color:var(--text-light);margin-bottom:12px">Patrones avanzados de MongoDB, RBAC y operaciones masivas.</p>
+    <ul class="exercises">
+      <li><span class="ex-num">4.1</span> <strong>Discriminator Models</strong> &mdash; herencia de modelos en Mongoose</li>
+      <li><span class="ex-num">4.2</span> <strong>RBAC Matrix</strong> &mdash; sistema de permisos por rol/etapa/accion (referencia: LenderoMO)</li>
+      <li><span class="ex-num">4.3</span> <strong>Bulk Operations</strong> &mdash; importacion/exportacion masiva con validacion</li>
+    </ul>
+  </div>
+
+  <div class="level-card l5">
+    <div class="level-header">
+      <div>
+        <div class="level-num">Level 5</div>
+        <div class="level-title">Capstone</div>
+      </div>
+      <div class="hours">15-20 horas</div>
+    </div>
+    <p style="color:var(--text-light);margin-bottom:12px">Feature completa desde cero. Demuestra todo lo aprendido.</p>
+    <ul class="exercises">
+      <li><span class="ex-num">5.1</span> <strong>Announcement Board</strong> &mdash; sistema completo de anuncios (model, API, UI, permisos, notificaciones)</li>
+    </ul>
+  </div>
+
+  <!-- 7. WORKFLOW -->
+  <div class="page-break"></div>
+  <h2 id="workflow">7. Como trabajar cada ejercicio</h2>
+
+  <h3>Flujo para cada ejercicio:</h3>
+  <ol>
+    <li><strong>Lee el archivo del ejercicio completo</strong> antes de escribir codigo</li>
+    <li><strong>Lee los "Archivos de Referencia"</strong> &mdash; son codigo existente que sirve como ejemplo</li>
+    <li><strong>Planea</strong> antes de implementar (usa Claude Code para explorar)</li>
+    <li><strong>Implementa</strong> paso a paso siguiendo las instrucciones</li>
+    <li><strong>Verifica</strong> cada criterio de aceptacion al terminar</li>
+    <li><strong>Marca tu progreso</strong> en <code>playground/PROGRESS.md</code></li>
+  </ol>
+
+  <div class="card info">
+    <div class="card-title">Usa herramientas AI inteligentemente</div>
+    <p>Cada ejercicio tiene una seccion "Guia de AI Tool" con sugerencias especificas de cuando usar Claude Code y cuando usar Cursor. Siguelas.</p>
+  </div>
+
+  <h3>Reglas</h3>
+  <ul>
+    <li><strong>Levels 0-2 son secuenciales</strong> &mdash; cada uno construye sobre el anterior</li>
+    <li><strong>Levels 3-5 pueden hacerse en cualquier orden</strong> dentro del nivel</li>
+    <li><strong>No avances sin completar todos los criterios de aceptacion</strong></li>
+    <li>Siempre ejecuta <code>npm run typecheck</code> despues de cada cambio para verificar tipos</li>
+  </ul>
+
+  <!-- 8. TIPS -->
+  <h2 id="tips">8. Tips y mejores practicas</h2>
+
+  <h3>Sobre el codigo</h3>
+  <ul>
+    <li><strong>TypeScript es tu amigo.</strong> Si algo esta en rojo, arreglalo antes de continuar. <code>npm run typecheck</code> debe pasar siempre.</li>
+    <li><strong>Sigue los patrones existentes.</strong> Antes de crear algo nuevo, busca como se hace en el codebase actual.</li>
+    <li><strong>Un cambio a la vez.</strong> Haz commits frecuentes. Si algo se rompe, puedes volver atras.</li>
+    <li><strong>Lee antes de escribir.</strong> Los mejores developers pasan mas tiempo leyendo codigo que escribiendolo.</li>
+  </ul>
+
+  <h3>Sobre herramientas AI</h3>
+  <ul>
+    <li><strong>AI genera el 80%, tu escribes el 20% critico.</strong> Usa AI para boilerplate, escribe la logica de negocio tu.</li>
+    <li><strong>Siempre verifica el output del AI.</strong> No todo lo que genera es correcto.</li>
+    <li><strong>Aprende a escribir buenos prompts.</strong> "Crea un componente" es peor que "crea un componente de tabla con sort y filter siguiendo el patron de beneficiarios/page.tsx".</li>
+    <li><strong>Cuando el AI se equivoca, explicale por que.</strong> Asi mejora el siguiente intento.</li>
+  </ul>
+
+  <h3>Sobre productividad</h3>
+  <ul>
+    <li><strong>DevTools es tu mejor herramienta de debugging.</strong> Network tab, Console, Elements.</li>
+    <li><strong>Usa el terminal.</strong> <code>curl</code> para probar endpoints. <code>mongosh</code> para inspeccionar datos.</li>
+    <li><strong>Documenta lo que aprendes.</strong> Usa la seccion "Notas personales" de PROGRESS.md.</li>
+  </ul>
+
+  <!-- 9. TROUBLESHOOTING -->
+  <div class="page-break"></div>
+  <h2 id="troubleshooting">9. Problemas comunes</h2>
+
+  <table>
+    <tr><th>Problema</th><th>Solucion</th></tr>
+    <tr><td><code>npm install</code> falla con ERESOLVE</td><td><code>npm install --legacy-peer-deps</code></td></tr>
+    <tr><td>MongoDB connection refused</td><td>Verifica que MongoDB esta corriendo: <code>docker ps</code> o <code>mongosh</code></td></tr>
+    <tr><td>Puerto 3000/3001 ocupado</td><td><code>lsof -i :3000</code> (Mac) o <code>netstat -ano | findstr :3000</code> (Win)</td></tr>
+    <tr><td><code>git clone</code> &rarr; repository not found</td><td>No tienes acceso. Envia tu GitHub username al equipo.</td></tr>
+    <tr><td><code>claude</code> command not found</td><td><code>npm install -g @anthropic-ai/claude-code</code></td></tr>
+    <tr><td>Login no funciona (403 o credenciales invalidas)</td><td>Ejecuta <code>npm run seed:playground</code> en el backend</td></tr>
+    <tr><td>Frontend muestra pagina en blanco</td><td>Verifica que el backend esta corriendo en puerto 3000</td></tr>
+    <tr><td><code>typecheck</code> muestra errores</td><td>Lee los errores. Usa Claude Code: <code>claude "explica este error de TypeScript: [error]"</code></td></tr>
+    <tr><td>Docker container no inicia</td><td><code>docker logs mongodb</code> para ver el error</td></tr>
+  </table>
+
+  <!-- 10. REFERENCE -->
+  <h2 id="ref">10. Referencia rapida</h2>
+
+  <h3>Usuarios de prueba</h3>
+  <table>
+    <tr><th>Email</th><th>Password</th><th>Rol</th></tr>
+    <tr><td>admin@playground.local</td><td>playground123</td><td>corporate (acceso total)</td></tr>
+    <tr><td>manager@playground.local</td><td>playground123</td><td>administrator (gestion)</td></tr>
+    <tr><td>viewer@playground.local</td><td>playground123</td><td>subaccount (solo lectura)</td></tr>
+  </table>
+
+  <h3>URLs locales</h3>
+  <table>
+    <tr><th>Servicio</th><th>URL</th></tr>
+    <tr><td>Backend API</td><td><code>http://localhost:3000</code></td></tr>
+    <tr><td>Frontend</td><td><code>http://localhost:3001</code></td></tr>
+    <tr><td>Health check</td><td><code>http://localhost:3000/api/health</code></td></tr>
+    <tr><td>Mock Finco API</td><td><code>http://localhost:3000/api/v1/mock-finco/instruments</code></td></tr>
+  </table>
+
+  <h3>Comandos frecuentes</h3>
+  <pre><code># Backend
+cd lenderohub-backend
+npm run dev              # Iniciar servidor de desarrollo
+npm run typecheck        # Verificar tipos TypeScript
+npm run seed:playground  # Crear usuarios de prueba
+
+# Frontend
+cd lenderohub-frontend
+npm run dev              # Iniciar servidor de desarrollo
+npm run typecheck        # Verificar tipos TypeScript
+
+# Claude Code
+claude "tu pregunta aqui"           # Pregunta general
+claude "explica este archivo: ruta" # Explorar codigo
+
+# Git
+git status               # Ver cambios
+git add .                # Preparar cambios
+git commit -m "mensaje"  # Guardar cambios</code></pre>
+
+  <h3>Estructura del proyecto</h3>
+  <pre><code>lenderohub-playground/
+├── lenderohub-backend/       # API Express + TypeScript
+│   ├── src/
+│   │   ├── server.ts         # Punto de entrada
+│   │   ├── routes/           # Endpoints
+│   │   ├── controllers/      # Logica de negocio
+│   │   ├── models/           # Modelos MongoDB
+│   │   ├── middlewares/      # Auth, permisos
+│   │   └── services/         # Servicios compartidos
+│   └── .env.local.example
+├── lenderohub-frontend/      # Next.js + Tailwind
+│   ├── src/
+│   │   ├── app/              # Paginas
+│   │   ├── components/       # Componentes React
+│   │   ├── services/         # Llamadas al API
+│   │   └── lib/              # Utilidades
+│   └── .env.local.example
+└── playground/               # Ejercicios
+    ├── level-0/              # Foundations (4 ejercicios)
+    ├── level-1/              # Frontend Basics (4 ejercicios)
+    ├── level-2/              # Backend Basics (4 ejercicios)
+    ├── level-3/              # Full-Stack (3 ejercicios)
+    ├── level-4/              # Advanced (3 ejercicios)
+    └── level-5/              # Capstone (1 ejercicio)</code></pre>
+
+  <div class="footer">
+    <p><strong>LenderoCapital</strong> &mdash; Programa de Training Full-Stack 2026</p>
+    <p>Si te atoras, usa Claude Code primero. Si aun no puedes resolverlo, contacta al equipo.</p>
+  </div>
+
+</div>
+
+</body>
+</html>
