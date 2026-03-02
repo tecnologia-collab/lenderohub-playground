@@ -29,6 +29,7 @@ interface IBeneficiary {
   account: mongoose.Types.ObjectId | mongoose.HydratedDocument<accountsModels.IExternalAccount>
   userProfile: mongoose.Types.ObjectId | mongoose.HydratedDocument<any>
   status: BeneficiaryStatus
+  lastModifiedBy?: mongoose.Types.ObjectId
 }
 
 type BeneficiaryModel = mongoose.Model<IBeneficiary>
@@ -52,6 +53,10 @@ const beneficiarySchema = new mongoose.Schema<IBeneficiary, BeneficiaryModel>({
     enum: Object.values(BeneficiaryStatus),
     required: true,
     default: BeneficiaryStatus.Active
+  },
+  lastModifiedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   }
 }, {
   collection: 'beneficiaries',

@@ -65,7 +65,7 @@ export const beneficiaryClustersService = {
     if (search) params.search = search;
 
     const response = await api.get<{ data: BeneficiaryCluster[] }>(
-      '/v1/beneficiary-clusters',
+      '/beneficiary-clusters',
       params
     );
     return response.data;
@@ -76,7 +76,7 @@ export const beneficiaryClustersService = {
    */
   async getById(id: string): Promise<BeneficiaryCluster> {
     const response = await api.get<{ data: BeneficiaryCluster }>(
-      `/v1/beneficiary-clusters/${id}`
+      `/beneficiary-clusters/${id}`
     );
     return response.data;
   },
@@ -86,7 +86,7 @@ export const beneficiaryClustersService = {
    */
   async create(data: CreateClusterRequest): Promise<BeneficiaryCluster> {
     const response = await api.post<{ data: BeneficiaryCluster }>(
-      '/v1/beneficiary-clusters',
+      '/beneficiary-clusters',
       data
     );
     return response.data;
@@ -97,7 +97,7 @@ export const beneficiaryClustersService = {
    */
   async update(id: string, data: UpdateClusterRequest): Promise<BeneficiaryCluster> {
     const response = await api.put<{ data: BeneficiaryCluster }>(
-      `/v1/beneficiary-clusters/${id}`,
+      `/beneficiary-clusters/${id}`,
       data
     );
     return response.data;
@@ -107,7 +107,7 @@ export const beneficiaryClustersService = {
    * Soft-delete a cluster
    */
   async delete(id: string): Promise<void> {
-    await api.delete(`/v1/beneficiary-clusters/${id}`);
+    await api.delete(`/beneficiary-clusters/${id}`);
   },
 
   /**
@@ -118,7 +118,7 @@ export const beneficiaryClustersService = {
     beneficiaryIds: string[]
   ): Promise<BeneficiaryCluster> {
     const response = await api.post<{ data: BeneficiaryCluster }>(
-      `/v1/beneficiary-clusters/${clusterId}/beneficiaries`,
+      `/beneficiary-clusters/${clusterId}/beneficiaries`,
       { beneficiaryIds }
     );
     return response.data;
@@ -132,7 +132,7 @@ export const beneficiaryClustersService = {
     beneficiaryId: string
   ): Promise<BeneficiaryCluster> {
     const response = await api.delete<{ data: BeneficiaryCluster }>(
-      `/v1/beneficiary-clusters/${clusterId}/beneficiaries/${beneficiaryId}`
+      `/beneficiary-clusters/${clusterId}/beneficiaries/${beneficiaryId}`
     );
     return response.data;
   },

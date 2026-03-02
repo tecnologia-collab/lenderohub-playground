@@ -34,6 +34,7 @@ interface ICommissionRequest {
   rejectionMessage?: string
   commissionAgentBalance: mongoose.Types.ObjectId | mongoose.HydratedDocument<commissionAgentBalancesModels.ICommissionAgentBalance>
   transaction?: mongoose.Types.ObjectId | mongoose.HydratedDocument<transactionsModels.ITransactionTransferOut>
+  lastModifiedBy?: mongoose.Types.ObjectId
   // Virtual fields.
   amountTotal: dinero.Dinero
 }
@@ -94,6 +95,10 @@ const commissionRequestSchema = new mongoose.Schema<ICommissionRequest, Commissi
   commissionAgentBalance: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'CommissionAgentBalance'
+  },
+  lastModifiedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   }
 }, {
   collection: 'commissionRequests',

@@ -50,7 +50,7 @@ export const massTransferService = {
     formData.append('file', file);
     formData.append('costCentreId', costCentreId);
     const response = await api.post<ApiResponse<MassTransfer>>(
-      '/v1/mass-transfers/upload',
+      '/mass-transfers/upload',
       formData
     );
     return response.data;
@@ -61,7 +61,7 @@ export const massTransferService = {
    */
   async confirm(id: string): Promise<MassTransfer> {
     const response = await api.post<ApiResponse<MassTransfer>>(
-      `/v1/mass-transfers/${id}/confirm`
+      `/mass-transfers/${id}/confirm`
     );
     return response.data;
   },
@@ -71,7 +71,7 @@ export const massTransferService = {
    */
   async getById(id: string): Promise<MassTransfer> {
     const response = await api.get<ApiResponse<MassTransfer>>(
-      `/v1/mass-transfers/${id}`
+      `/mass-transfers/${id}`
     );
     return response.data;
   },
@@ -87,7 +87,7 @@ export const massTransferService = {
     const response = await api.get<{
       data: MassTransfer[];
       total: number;
-    }>('/v1/mass-transfers', { costCentreId, page, limit });
+    }>('/mass-transfers', { costCentreId, page, limit });
     return { data: response.data || [], total: response.total || 0 };
   },
 };

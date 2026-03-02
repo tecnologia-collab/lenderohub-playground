@@ -56,6 +56,7 @@ interface IClient extends mongoose.Document {
 
   // Status
   active: boolean
+  lastModifiedBy?: mongoose.Types.ObjectId
 
   // Timestamps
   createdAt: Date
@@ -165,6 +166,10 @@ const clientSchema = new mongoose.Schema<IClient, ClientModel>({
   active: {
     type: Boolean,
     default: true
+  },
+  lastModifiedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   }
 }, {
   collection: 'clients',

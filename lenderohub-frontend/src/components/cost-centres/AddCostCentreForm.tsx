@@ -123,6 +123,43 @@ export function AddCostCentreForm({ onSuccess, onError, onCancel }: AddCostCentr
   const [showContactData, setShowContactData] = useState(true);
   const [showFiscalData, setShowFiscalData] = useState(true);
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [constanciaFile, setConstanciaFile] = useState<File | null>(null);
+  const [constanciaLoading, setConstanciaLoading] = useState(false);
+  const [constanciaError, setConstanciaError] = useState<string | null>(null);
+  const [constanciaSuccess, setConstanciaSuccess] = useState(false);
+
+  const handleConstanciaUpload = async (file: File) => {
+    setConstanciaFile(file);
+    setConstanciaError(null);
+    setConstanciaSuccess(false);
+    setConstanciaLoading(true);
+    try {
+      const form = new FormData();
+      form.append('file', file);
+      const result = await costCentresService.parseConstancia(form);
+      const d = result.data;
+      setFormData(prev => ({
+        ...prev,
+        rfc: d.rfc || prev.rfc,
+        contactName: d.contactName || prev.contactName,
+        contactLastname: d.contactLastname || prev.contactLastname,
+        contactSecondLastname: d.contactSecondLastname || prev.contactSecondLastname,
+        fiscalStreet: d.fiscalStreet || prev.fiscalStreet,
+        fiscalExteriorNumber: d.fiscalExteriorNumber || prev.fiscalExteriorNumber,
+        fiscalNeighborhood: d.fiscalNeighborhood || prev.fiscalNeighborhood,
+        fiscalCity: d.fiscalCity || prev.fiscalCity,
+        fiscalState: d.fiscalState || prev.fiscalState,
+        fiscalPostalCode: d.fiscalPostalCode || prev.fiscalPostalCode,
+      }));
+      setShowContactData(true);
+      setShowFiscalData(true);
+      setConstanciaSuccess(true);
+    } catch (err: any) {
+      setConstanciaError(err.message || 'Error al procesar el PDF');
+    } finally {
+      setConstanciaLoading(false);
+    }
+  };
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -542,6 +579,41 @@ export function AddCostCentreForm({ onSuccess, onError, onCancel }: AddCostCentr
             </button>
 
             {showFiscalData && (
+              <>
+              {/* Upload CSF */}
+              <div className={`flex items-center gap-3 p-3 rounded-lg border-2 border-dashed transition-colors ${constanciaLoading ? 'border-primary/40 bg-primary/5' : constanciaSuccess ? 'border-emerald-400/60 bg-emerald-500/5' : 'border-border hover:border-primary/30'}`}>
+                <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 ${constanciaSuccess ? 'bg-emerald-500/10' : 'bg-muted'}`}>
+                  {constanciaLoading ? (
+                    <Loader2 className="w-4 h-4 text-primary animate-spin" />
+                  ) : constanciaSuccess ? (
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                  ) : (
+                    <AlertCircle className="w-4 h-4 text-muted-foreground" />
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  {constanciaLoading ? (
+                    <p className="text-sm font-medium text-primary">Leyendo constancia…</p>
+                  ) : constanciaSuccess ? (
+                    <>
+                      <p className="text-sm font-medium text-emerald-700">Datos extraídos correctamente</p>
+                      <p className="text-xs text-muted-foreground truncate">{constanciaFile?.name}</p>
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-sm font-medium text-foreground">Constancia de Situación Fiscal</p>
+                      <p className="text-xs text-muted-foreground">Sube el PDF del SAT para auto-rellenar</p>
+                    </>
+                  )}
+                  {constanciaError && <p className="text-xs text-destructive mt-0.5">{constanciaError}</p>}
+                </div>
+                <label htmlFor="constancia-upload" className={constanciaLoading ? 'pointer-events-none' : 'cursor-pointer'}>
+                  <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${constanciaSuccess ? 'bg-muted text-muted-foreground hover:bg-muted/80' : 'bg-primary text-primary-foreground hover:bg-primary/90'}`}>
+                    {constanciaSuccess ? 'Cambiar' : 'Adjuntar'}
+                  </span>
+                  <input id="constancia-upload" type="file" accept="application/pdf" className="hidden" disabled={constanciaLoading} onChange={(e) => { const f = e.target.files?.[0]; if (f) handleConstanciaUpload(f); e.target.value = ''; }} />
+                </label>
+              </div>
               <div className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="md:col-span-2">
@@ -684,6 +756,7 @@ export function AddCostCentreForm({ onSuccess, onError, onCancel }: AddCostCentr
                   </div>
                 </div>
               </div>
+              </>
             )}
           </div>
 

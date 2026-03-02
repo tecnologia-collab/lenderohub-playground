@@ -189,7 +189,7 @@ export const costCentresService = {
    */
   async getCostCentres(): Promise<CostCentre[]> {
     try {
-      const response = await api.get<{ data: any[] }>('/v1/cost-centres');
+      const response = await api.get<{ data: any[] }>('/cost-centres');
 
       return response.data.map(cc => ({
         id: cc._id || cc.id,
@@ -230,7 +230,7 @@ export const costCentresService = {
    */
   async getCostCentre(id: string): Promise<CostCentre> {
     try {
-      const response = await api.get<{ data: any }>(`/v1/cost-centres/${id}?includeAll=true`);
+      const response = await api.get<{ data: any }>(`/cost-centres/${id}?includeAll=true`);
       const cc = response.data;
 
       return {
@@ -272,7 +272,7 @@ export const costCentresService = {
    */
   async getCostCentreStats(id: string): Promise<CostCentreStats> {
     try {
-      const response = await api.get<{ data: CostCentreStats }>(`/v1/cost-centres/${id}/stats`);
+      const response = await api.get<{ data: CostCentreStats }>(`/cost-centres/${id}/stats`);
       return response.data;
     } catch (error) {
       const msg = error instanceof ApiError ? error.message : String(error);
@@ -286,7 +286,7 @@ export const costCentresService = {
    */
   async getCostCentreAccumulators(id: string): Promise<CostCentreAccumulators> {
     try {
-      const response = await api.get<{ data: CostCentreAccumulators }>(`/v1/cost-centres/${id}/accumulators`);
+      const response = await api.get<{ data: CostCentreAccumulators }>(`/cost-centres/${id}/accumulators`);
       return response.data;
     } catch (error) {
       const msg = error instanceof ApiError ? error.message : String(error);
@@ -300,7 +300,7 @@ export const costCentresService = {
    */
   async createCostCentre(data: CreateCostCentreRequest): Promise<CostCentre> {
     try {
-      const response = await api.post<{ data: any }>('/v1/cost-centres', data);
+      const response = await api.post<{ data: any }>('/cost-centres', data);
       const cc = response.data;
 
       return {
@@ -330,7 +330,7 @@ export const costCentresService = {
    */
   async updateCostCentre(id: string, data: UpdateCostCentreRequest): Promise<CostCentre> {
     try {
-      const response = await api.put<{ data: any }>(`/v1/cost-centres/${id}`, data);
+      const response = await api.put<{ data: any }>(`/cost-centres/${id}`, data);
       const cc = response.data;
 
       return {
@@ -360,7 +360,7 @@ export const costCentresService = {
    */
   async disableCostCentre(id: string): Promise<CostCentre> {
     try {
-      const response = await api.post<{ data: any }>(`/v1/cost-centres/${id}/disable`);
+      const response = await api.post<{ data: any }>(`/cost-centres/${id}/disable`);
       const cc = response.data;
 
       return {
@@ -390,7 +390,7 @@ export const costCentresService = {
    */
   async enableCostCentre(id: string): Promise<CostCentre> {
     try {
-      const response = await api.post<{ data: any }>(`/v1/cost-centres/${id}/enable`);
+      const response = await api.post<{ data: any }>(`/cost-centres/${id}/enable`);
       const cc = response.data;
 
       return {
@@ -420,7 +420,7 @@ export const costCentresService = {
    */
   async setDefaultCostCentre(id: string): Promise<CostCentre> {
     try {
-      const response = await api.post<{ data: any }>(`/v1/cost-centres/${id}/set-default`);
+      const response = await api.post<{ data: any }>(`/cost-centres/${id}/set-default`);
       const cc = response.data;
 
       return {
@@ -443,6 +443,24 @@ export const costCentresService = {
       console.error('Error setting default cost centre:', msg);
       throw error;
     }
+  },
+
+  /**
+   * Parse Constancia de Situación Fiscal PDF and extract fiscal data
+   */
+  async parseConstancia(formData: FormData): Promise<{ data: {
+    rfc: string;
+    contactName: string;
+    contactLastname: string;
+    contactSecondLastname: string;
+    fiscalStreet: string;
+    fiscalExteriorNumber: string;
+    fiscalNeighborhood: string;
+    fiscalCity: string;
+    fiscalState: string;
+    fiscalPostalCode: string;
+  }}> {
+    return api.post('/cost-centres/parse-constancia', formData);
   },
 
   /**

@@ -89,21 +89,21 @@ export const reportsService = {
    * Get transactions with filters and pagination
    */
   async getTransactions(params?: ReportTransactionsParams): Promise<ReportTransactionsResponse> {
-    return api.get<ReportTransactionsResponse>('/v1/reports/transactions', params);
+    return api.get<ReportTransactionsResponse>('/reports/transactions', params);
   },
 
   /**
    * Get summary data (totals + chart data)
    */
   async getSummary(params?: ReportSummaryParams): Promise<ReportSummary> {
-    return api.get<ReportSummary>('/v1/reports/summary', params);
+    return api.get<ReportSummary>('/reports/summary', params);
   },
 
   /**
    * Get commissions report
    */
   async getCommissions(params?: ReportCommissionsParams): Promise<ReportCommissionsResponse> {
-    return api.get<ReportCommissionsResponse>('/v1/reports/commissions', params);
+    return api.get<ReportCommissionsResponse>('/reports/commissions', params);
   },
 
   /**
@@ -116,6 +116,6 @@ export const reportsService = {
     params?: Record<string, string>
   ): string {
     const searchParams = new URLSearchParams({ type, format, ...params });
-    return `/v1/reports/export?${searchParams.toString()}`;
+    return `/reports/export?${searchParams.toString()}`;
   },
 };

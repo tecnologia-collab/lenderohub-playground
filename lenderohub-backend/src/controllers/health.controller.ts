@@ -8,6 +8,8 @@
 
 import { Request, Response, NextFunction } from 'express';
 import mongoose from 'mongoose';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 import { FincoClient } from '../integrations/finco/client';
 import { TransactionTransferOut, TransactionTransferOutStatus } from '../models/transactions.model';
 
@@ -183,6 +185,64 @@ export async function getHealth(req: Request, res: Response, _next: NextFunction
   res.status(httpStatus).json(result);
 }
 
+/**
+ * GET /api/v1/health/detailed
+ * Public detailed health check: version, uptime, MongoDB state, memory usage.
+ */
+export async function getDetailedHealth(_req: Request, res: Response, _next: NextFunction) {
+  const pkg = JSON.parse(readFileSync(join(__dirname, '../../package.json'), 'utf-8'));
+
+  const dbState = mongoose.connection.readyState;
+  const dbStateLabels: Record<number, string> = { 0: 'disconnected', 1: 'connected', 2: 'connecting', 3: 'disconnecting' };
+  const dbStatus = dbState === 1 ? 'up' : 'down';
+
+  let dbLatencyMs = -1;
+  if (dbState === 1) {
+    const start = Date.now();
+    try {
+      await mongoose.connection.db!.admin().ping();
+      dbLatencyMs = Date.now() - start;
+    } catch {
+      // latency stays -1
+    }
+  }
+
+  const mem = process.memoryUsage();
+
+  res.json({
+    version: pkg.version,
+    uptime: {
+      seconds: Math.floor(process.uptime()),
+      human: formatUptime(process.uptime()),
+    },
+    database: {
+      status: dbStatus,
+      state: dbStateLabels[dbState] ?? 'unknown',
+      latencyMs: dbLatencyMs,
+    },
+    memory: {
+      rss: formatBytes(mem.rss),
+      heapUsed: formatBytes(mem.heapUsed),
+      heapTotal: formatBytes(mem.heapTotal),
+      external: formatBytes(mem.external),
+    },
+    timestamp: new Date().toISOString(),
+  });
+}
+
+function formatUptime(seconds: number): string {
+  const d = Math.floor(seconds / 86400);
+  const h = Math.floor((seconds % 86400) / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = Math.floor(seconds % 60);
+  return [d && `${d}d`, h && `${h}h`, m && `${m}m`, `${s}s`].filter(Boolean).join(' ');
+}
+
+function formatBytes(bytes: number): string {
+  return `${(bytes / 1024 / 1024).toFixed(2)} MB`;
+}
+
 export default {
   getHealth,
+  getDetailedHealth,
 };

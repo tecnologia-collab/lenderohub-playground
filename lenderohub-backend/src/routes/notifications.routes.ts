@@ -19,4 +19,7 @@ router.put('/read-all', notificationsController.markAllAsRead);
 // PUT /notifications/:id/read - Mark single as read
 router.put('/:id/read', notificationsController.markAsRead);
 
+// POST /notifications - Create notification (admin only)
+router.post('/', notificationsController.createNotification);
+
 export default router;

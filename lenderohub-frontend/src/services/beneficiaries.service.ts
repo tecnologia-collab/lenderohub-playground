@@ -34,7 +34,7 @@ export const beneficiariesService = {
    */
   async getBeneficiaries(): Promise<Beneficiary[]> {
     try {
-      const response = await api.get<{ data: any[] }>('/v1/beneficiaries');
+      const response = await api.get<{ data: any[] }>('/beneficiaries');
       
       // Transform backend response to Beneficiary format
       return response.data.map(instrument => ({
@@ -62,7 +62,7 @@ export const beneficiariesService = {
    */
   async getBeneficiary(id: string): Promise<Beneficiary> {
     try {
-      const response = await api.get<{ data: any }>(`/v1/beneficiaries/${id}`);
+      const response = await api.get<{ data: any }>(`/beneficiaries/${id}`);
       const instrument = response.data;
       
       return {
@@ -96,7 +96,7 @@ export const beneficiariesService = {
         rfc: data.rfc || undefined,
       };
 
-      const response = await api.post<{ data: any }>('/v1/beneficiaries', requestBody);
+      const response = await api.post<{ data: any }>('/beneficiaries', requestBody);
       const instrument = response.data;
       
       return {
@@ -123,7 +123,7 @@ export const beneficiariesService = {
    */
   async deleteBeneficiary(id: string): Promise<void> {
     try {
-      await api.delete(`/v1/beneficiaries/${id}`);
+      await api.delete(`/beneficiaries/${id}`);
     } catch (error) {
       console.error('Error deleting beneficiary:', error);
       throw error;

@@ -5,6 +5,7 @@ export interface IAdminCostCentreAssignment extends mongoose.Document {
   costCentre: mongoose.Types.ObjectId;
   isActive: boolean;
   createdBy?: mongoose.Types.ObjectId;
+  lastModifiedBy?: mongoose.Types.ObjectId;
 }
 
 const schema = new mongoose.Schema({
@@ -12,6 +13,7 @@ const schema = new mongoose.Schema({
   costCentre: { type: mongoose.Schema.Types.ObjectId, ref: 'CostCentre', required: true },
   isActive: { type: Boolean, default: true },
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  lastModifiedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 }, { timestamps: true });
 
 schema.index({ costCentre: 1 }, { unique: true, partialFilterExpression: { isActive: true } });

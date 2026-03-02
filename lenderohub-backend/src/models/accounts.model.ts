@@ -83,6 +83,7 @@ interface IAccount {
   type: AccountType
   status: AccountStatus
   alias: string
+  lastModifiedBy?: mongoose.Types.ObjectId
   createdAt?: Date
   updatedAt?: Date
 }
@@ -103,6 +104,10 @@ const accountSchema = new mongoose.Schema<IAccount, AccountModel>({
   },
   alias: {
     type: String
+  },
+  lastModifiedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   }
 }, {
   collection: 'accounts',

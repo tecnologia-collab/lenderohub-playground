@@ -18,6 +18,7 @@ import compression from 'compression';
 import rateLimit from 'express-rate-limit';
 import beneficiariesRoutes from './routes/beneficiaries.routes';
 import authRoutes from './modules/auth/auth.routes';
+import { activityLoggerMiddleware } from './middlewares/activity-logger.middleware';
 
 // Configuración
 const NODE_ENV = process.env.NODE_ENV || 'development';
@@ -83,12 +84,15 @@ const apiLimiter = rateLimit({
   legacyHeaders: false,
 });
 
-app.use('/api/auth/login', authLimiter);
-app.use('/api/auth/forgot-password', authLimiter);
+app.use('/api/v1/auth/login', authLimiter);
+app.use('/api/v1/auth/forgot-password', authLimiter);
 app.use('/api/', apiLimiter);
 
+// 5.5. Activity Logger
+app.use(activityLoggerMiddleware);
+
 // 6. Rutas
-app.use('/api/auth', authRoutes); // Auth routes (login, logout, 2FA - todo consolidado)
+app.use('/api/v1/auth', authRoutes); // Auth routes (login, logout, 2FA - todo consolidado)
 app.use('/api/v1/beneficiaries', beneficiariesRoutes);
 app.use('/api/v1', routes);
 
@@ -100,8 +104,8 @@ app.get('/', (req: Request, res: Response) => {
     status: 'active',
     endpoints: {
       health: '/health',
-      auth: '/api/auth',
-      '2fa': '/api/auth/setup-2fa',
+      auth: '/api/v1/auth',
+      '2fa': '/api/v1/auth/setup-2fa',
       api: '/api/v1',
       docs: '/api/docs'
     }
@@ -120,6 +124,7 @@ app.use('*', (req: Request, res: Response) => {
 });
 
 // Error handler (MED-02: Don't expose error details in non-development)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.error('Error:', err);
 
@@ -186,8 +191,8 @@ const startServer = async () => {
       console.log('🔗 Endpoints principales:');
       console.log(`   • Inicio: http://localhost:${PORT}/`);
       console.log(`   • Health: http://localhost:${PORT}/api/health`);
-      console.log(`   • Login: http://localhost:${PORT}/api/auth/login`);
-      console.log(`   • Setup 2FA: http://localhost:${PORT}/api/auth/setup-2fa`);
+      console.log(`   • Login: http://localhost:${PORT}/api/v1/auth/login`);
+      console.log(`   • Setup 2FA: http://localhost:${PORT}/api/v1/auth/setup-2fa`);
       console.log('');
       console.log('📝 Prueba rápida con curl:');
       console.log(`   curl http://localhost:${PORT}/api/health`);

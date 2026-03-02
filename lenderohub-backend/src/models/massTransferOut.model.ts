@@ -93,6 +93,7 @@ interface IMassTransferOut extends mongoose.Document {
   successCount: number
   failCount: number
   rows: IMassTransferRow[]
+  lastModifiedBy?: mongoose.Types.ObjectId
   createdAt: Date
   updatedAt: Date
 }
@@ -155,7 +156,11 @@ const massTransferOutSchema = new mongoose.Schema<IMassTransferOut, MassTransfer
     required: true,
     default: 0
   },
-  rows: [massTransferRowSchema]
+  rows: [massTransferRowSchema],
+  lastModifiedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }
 }, {
   timestamps: true
 })

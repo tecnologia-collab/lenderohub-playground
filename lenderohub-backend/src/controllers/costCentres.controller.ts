@@ -4,13 +4,42 @@
  * Handles Cost Centre management for Corporate Clients
  */
 
-import { Response } from 'express'
+import { Request, Response } from 'express'
 import { CostCentresService } from '../services/costCentres'
 import { FincoClient } from '../integrations/finco/client'
 import { Provider } from '../models/shared/enums'
 import { AuthRequest } from '../middlewares/auth.middleware'
 import { CostCentreAccumulator } from '../models/costCentreAccumulators.model'
 import { dayjs } from '../utils/dayjs'
+import multer from 'multer'
+import { PDFParse } from 'pdf-parse'
+
+export const constanciaUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 10 * 1024 * 1024 },
+  fileFilter: (_req, file, cb) => {
+    if (file.mimetype === 'application/pdf') cb(null, true);
+    else cb(new Error('Solo se permiten archivos PDF'));
+  },
+});
+
+function parseConstanciaText(text: string) {
+  const t = text.replace(/\r\n/g, '\n').replace(/[ \t]+/g, ' ');
+  const extract = (pattern: RegExp) => { const m = t.match(pattern); return m ? m[1].trim() : ''; };
+  const toTitle = (s: string) => s.toLowerCase().replace(/(?<![a-záéíóúüñ])[a-záéíóúüñ]/gi, c => c.toUpperCase()).trim();
+  return {
+    rfc: extract(/RFC:\s*([A-ZÑ&]{3,4}\d{6}[A-Z0-9]{3})/i).toUpperCase(),
+    contactName: toTitle(extract(/Nombre\s*\(s\):\s*([^\n]+)/i)),
+    contactLastname: toTitle(extract(/Primer Apellido:\s*([^\n]+)/i)),
+    contactSecondLastname: toTitle(extract(/Segundo Apellido:\s*([^\n]+)/i)),
+    fiscalPostalCode: extract(/C[oó]digo Postal:?\s*(\d{5})/i),
+    fiscalStreet: toTitle(extract(/Nombre de Vialidad:\s*([^\n]+)/i)),
+    fiscalExteriorNumber: extract(/N[uú]mero Exterior:\s*([^\n]+)/i),
+    fiscalNeighborhood: toTitle(extract(/Nombre de la Colonia:\s*([^\n]+)/i)),
+    fiscalCity: toTitle(extract(/Nombre del Municipio o Demarcaci[oó]n Territorial:\s*([^\n]+)/i)),
+    fiscalState: toTitle(extract(/Nombre de la Entidad Federativa:\s*([^\n]+)/i)),
+  };
+}
 
 // Initialize Finco Client
 const fincoClient = new FincoClient({
@@ -445,5 +474,19 @@ export const costCentresController = {
         message: error.message
       })
     }
-  }
+  },
+
+  parseConstancia: async (req: Request, res: Response) => {
+    try {
+      if (!req.file) return res.status(400).json({ success: false, message: 'No se recibió ningún archivo PDF' });
+      const parser = new PDFParse({ data: req.file.buffer });
+      const parsed = await parser.getText();
+      const fields = parseConstanciaText(parsed.text);
+      if (!fields.rfc) return res.status(422).json({ success: false, message: 'No se pudo extraer información. Verifica que sea una Constancia del SAT.' });
+      return res.status(200).json({ success: true, data: fields });
+    } catch (err: any) {
+      console.error('[parseConstancia]', err.message);
+      return res.status(500).json({ success: false, message: 'Error al procesar el PDF' });
+    }
+  },
 }

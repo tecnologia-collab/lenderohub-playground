@@ -20,6 +20,7 @@ export interface IBeneficiaryCluster extends mongoose.Document {
   beneficiaries: string[];  // Finco instrument IDs (not ObjectIds)
   color?: string;           // hex color for UI display
   isActive: boolean;
+  lastModifiedBy?: mongoose.Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -69,6 +70,10 @@ const beneficiaryClusterSchema = new mongoose.Schema<IBeneficiaryCluster>({
   isActive: {
     type: Boolean,
     default: true
+  },
+  lastModifiedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   }
 }, {
   collection: 'beneficiaryClusters',

@@ -41,19 +41,19 @@ export const notificationsService = {
     if (params?.page) queryParams.page = params.page;
     if (params?.limit) queryParams.limit = params.limit;
 
-    return api.get<NotificationsResponse>('/v1/notifications', queryParams);
+    return api.get<NotificationsResponse>('/notifications', queryParams);
   },
 
   async getUnreadCount(): Promise<number> {
-    const res = await api.get<UnreadCountResponse>('/v1/notifications/unread-count');
+    const res = await api.get<UnreadCountResponse>('/notifications/unread-count');
     return res.data.count;
   },
 
   async markAsRead(id: string): Promise<void> {
-    await api.put(`/v1/notifications/${id}/read`);
+    await api.put(`/notifications/${id}/read`);
   },
 
   async markAllAsRead(): Promise<void> {
-    await api.put('/v1/notifications/read-all');
+    await api.put('/notifications/read-all');
   },
 };

@@ -123,6 +123,8 @@ class ApiClient {
   private defaultHeaders: Record<string, string>;
 
   constructor(baseUrl: string) {
+    console.log('API BASE URL REAL:', baseUrl); // ← línea de diagnóstico
+  
     this.baseUrl = baseUrl;
     this.defaultHeaders = {
       'Content-Type': 'application/json',
@@ -285,7 +287,7 @@ class ApiClient {
 // ============================================
 // Export singleton instance
 // ============================================
-export const api = new ApiClient(env.apiUrl);
+export const api = new ApiClient(`${env.apiUrl}/v1`);
 
 // Export for custom instances
 export { ApiClient };

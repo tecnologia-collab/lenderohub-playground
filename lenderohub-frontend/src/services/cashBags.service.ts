@@ -52,7 +52,7 @@ export const virtualBagsService = {
    * Get all virtual bags
    */
   async getVirtualBags(params?: GetVirtualBagsParams): Promise<VirtualBag[]> {
-    const response = await api.get<{ data: VirtualBag[] }>('/v1/virtual-bags', params);
+    const response = await api.get<{ data: VirtualBag[] }>('/virtual-bags', params);
     return response.data;
   },
 
@@ -60,7 +60,7 @@ export const virtualBagsService = {
    * Get a single virtual bag by ID
    */
   async getVirtualBag(bagId: string): Promise<VirtualBag> {
-    const response = await api.get<{ data: VirtualBag }>(`/v1/virtual-bags/${bagId}`);
+    const response = await api.get<{ data: VirtualBag }>(`/virtual-bags/${bagId}`);
     return response.data;
   },
 
@@ -68,7 +68,7 @@ export const virtualBagsService = {
    * Create a new virtual bag
    */
   async createVirtualBag(data: CreateVirtualBagRequest): Promise<VirtualBag> {
-    const response = await api.post<{ data: VirtualBag }>('/v1/virtual-bags', data);
+    const response = await api.post<{ data: VirtualBag }>('/virtual-bags', data);
     return response.data;
   },
 
@@ -76,7 +76,7 @@ export const virtualBagsService = {
    * Update a virtual bag
    */
   async updateVirtualBag(bagId: string, data: Partial<CreateVirtualBagRequest>): Promise<VirtualBag> {
-    const response = await api.patch<{ data: VirtualBag }>(`/v1/virtual-bags/${bagId}`, data);
+    const response = await api.patch<{ data: VirtualBag }>(`/virtual-bags/${bagId}`, data);
     return response.data;
   },
 
@@ -84,7 +84,7 @@ export const virtualBagsService = {
    * Delete (deactivate) a virtual bag
    */
   async deleteVirtualBag(bagId: string): Promise<void> {
-    await api.delete(`/v1/virtual-bags/${bagId}`);
+    await api.delete(`/virtual-bags/${bagId}`);
   },
 
   /**
@@ -93,7 +93,7 @@ export const virtualBagsService = {
   async transfer(request: VirtualBagTransferRequest): Promise<VirtualBagTransferResult> {
     try {
       const response = await api.post<{ fromBag: VirtualBag; toBag: VirtualBag }>(
-        '/v1/virtual-bags/transfer',
+        '/virtual-bags/transfer',
         request
       );
       return {
@@ -113,7 +113,7 @@ export const virtualBagsService = {
    * Get movements for a specific virtual bag
    */
   async getMovements(bagId: string, params?: PaginationParams): Promise<PaginatedResponse<VirtualBagMovement>> {
-    const response = await api.get<{ data: VirtualBagMovement[] }>(`/v1/virtual-bags/${bagId}/movements`, params);
+    const response = await api.get<{ data: VirtualBagMovement[] }>(`/virtual-bags/${bagId}/movements`, params);
     return {
       data: response.data,
       currentPage: 1,
@@ -127,7 +127,7 @@ export const virtualBagsService = {
    * Assign users to a virtual bag
    */
   async assignUsers(bagId: string, userIds: string[]): Promise<VirtualBag> {
-    const response = await api.post<{ data: VirtualBag }>(`/v1/virtual-bags/${bagId}/users`, { userIds });
+    const response = await api.post<{ data: VirtualBag }>(`/virtual-bags/${bagId}/users`, { userIds });
     return response.data;
   },
 
@@ -135,7 +135,7 @@ export const virtualBagsService = {
    * Remove users from a virtual bag
    */
   async removeUsers(bagId: string, userIds: string[]): Promise<VirtualBag> {
-    const response = await api.post<{ data: VirtualBag }>(`/v1/virtual-bags/${bagId}/users/remove`, { userIds });
+    const response = await api.post<{ data: VirtualBag }>(`/virtual-bags/${bagId}/users/remove`, { userIds });
     return response.data;
   },
 
@@ -143,7 +143,7 @@ export const virtualBagsService = {
    * Get total balance across all virtual bags
    */
   async getTotalBalance(): Promise<{ total: number; currency: string }> {
-    const response = await api.get<{ data: { total: number; currency: string } }>('/v1/virtual-bags/total-balance');
+    const response = await api.get<{ data: { total: number; currency: string } }>('/virtual-bags/total-balance');
     return response.data;
   },
 
@@ -151,7 +151,7 @@ export const virtualBagsService = {
    * Get virtual bag stats
    */
   async getStats(): Promise<VirtualBagsStats> {
-    const response = await api.get<{ data: VirtualBagsStats }>('/v1/virtual-bags/stats');
+    const response = await api.get<{ data: VirtualBagsStats }>('/virtual-bags/stats');
     return response.data;
   },
 };

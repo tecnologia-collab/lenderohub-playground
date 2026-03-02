@@ -78,7 +78,8 @@ export interface IUser extends Document {
   createdAt: Date;
   updatedAt: Date;
   createdBy?: Schema.Types.ObjectId;
-  
+  lastModifiedBy?: Schema.Types.ObjectId;
+
   // Virtuals
   readonly fullName: string;
   
@@ -241,6 +242,10 @@ const userSchema = new Schema<IUser>(
     
     // Metadata
     createdBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
+    lastModifiedBy: {
       type: Schema.Types.ObjectId,
       ref: 'User',
     },

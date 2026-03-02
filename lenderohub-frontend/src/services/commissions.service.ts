@@ -121,7 +121,7 @@ const unwrapResponse = <T>(response: any): T => {
 export const commissionsService = {
   async getDashboard(): Promise<CommissionDashboardResponse> {
     try {
-      const response = await api.get<any>("/v1/commissions/ceco/dashboard");
+      const response = await api.get<any>("/commissions/ceco/dashboard");
       return unwrapResponse<CommissionDashboardResponse>(response);
     } catch (error) {
       if (error instanceof ApiError) {
@@ -135,7 +135,7 @@ export const commissionsService = {
 
   async getCostCentres(): Promise<CommissionCostCentre[]> {
     try {
-      const response = await api.get<any>("/v1/commissions/ceco/centres");
+      const response = await api.get<any>("/commissions/ceco/centres");
       const payload = unwrapResponse<{ costCentres: CommissionCostCentre[] }>(response);
       return payload.costCentres || [];
     } catch (error) {
@@ -150,7 +150,7 @@ export const commissionsService = {
 
   async getTransfers(params: GetTransfersParams = {}): Promise<CommissionTransfersResponse> {
     try {
-      const response = await api.get<any>("/v1/commissions/ceco/transfers", params);
+      const response = await api.get<any>("/commissions/ceco/transfers", params);
       return unwrapResponse<CommissionTransfersResponse>(response);
     } catch (error) {
       if (error instanceof ApiError) {
@@ -164,7 +164,7 @@ export const commissionsService = {
 
   async getMonthlyChargesTransfers(params: GetTransfersParams = {}): Promise<CommissionTransfersResponse> {
     try {
-      const response = await api.get<any>("/v1/commissions/ceco/monthly-charges-transfers", params);
+      const response = await api.get<any>("/commissions/ceco/monthly-charges-transfers", params);
       return unwrapResponse<CommissionTransfersResponse>(response);
     } catch (error) {
       if (error instanceof ApiError) {
@@ -178,7 +178,7 @@ export const commissionsService = {
 
   async getCollection(period: string): Promise<CommissionCollectionResponse> {
     try {
-      const response = await api.get<any>("/v1/commissions/ceco/collection", { period });
+      const response = await api.get<any>("/commissions/ceco/collection", { period });
       return unwrapResponse<CommissionCollectionResponse>(response);
     } catch (error) {
       if (error instanceof ApiError) {
@@ -192,7 +192,7 @@ export const commissionsService = {
 
   async transferToCorporate(accountTag: CommissionAccountTag, amount: number): Promise<void> {
     try {
-      await api.post("/v1/commissions/ceco/transfer", { accountTag, amount });
+      await api.post("/commissions/ceco/transfer", { accountTag, amount });
     } catch (error) {
       if (error instanceof ApiError) {
         console.error("Error creating commission transfer:", error.message);
@@ -205,7 +205,7 @@ export const commissionsService = {
 
   async collectByTag(accountTag: CommissionAccountTag): Promise<{ totalTransfers: number; totalAmount: number }> {
     try {
-      const response = await api.post<any>("/v1/commissions/ceco/collect", { accountTag });
+      const response = await api.post<any>("/commissions/ceco/collect", { accountTag });
       const payload = unwrapResponse<{ totalTransfers: number; totalAmount: number }>(response);
       return payload;
     } catch (error) {
@@ -224,7 +224,7 @@ export const commissionsService = {
 
   async getCommissionRequests(params?: { status?: string; mine?: boolean }): Promise<CommissionRequestsResponse> {
     try {
-      const response = await api.get<any>("/v1/commission-agents/commission-requests", params);
+      const response = await api.get<any>("/commission-agents/commission-requests", params);
       return unwrapResponse<CommissionRequestsResponse>(response);
     } catch (error) {
       if (error instanceof ApiError) {
@@ -238,7 +238,7 @@ export const commissionsService = {
 
   async createCommissionRequest(data: FormData): Promise<any> {
     try {
-      const response = await api.post<any>("/v1/commission-agents/commission-requests", data);
+      const response = await api.post<any>("/commission-agents/commission-requests", data);
       return response;
     } catch (error) {
       if (error instanceof ApiError) {
@@ -252,7 +252,7 @@ export const commissionsService = {
 
   async approveCommissionRequest(id: string): Promise<any> {
     try {
-      const response = await api.put<any>(`/v1/commission-agents/commission-requests/${id}/approve`);
+      const response = await api.put<any>(`/commission-agents/commission-requests/${id}/approve`);
       return response;
     } catch (error) {
       if (error instanceof ApiError) {
@@ -266,7 +266,7 @@ export const commissionsService = {
 
   async rejectCommissionRequest(id: string, rejectionMessage: string): Promise<any> {
     try {
-      const response = await api.put<any>(`/v1/commission-agents/commission-requests/${id}/reject`, { rejectionMessage });
+      const response = await api.put<any>(`/commission-agents/commission-requests/${id}/reject`, { rejectionMessage });
       return response;
     } catch (error) {
       if (error instanceof ApiError) {

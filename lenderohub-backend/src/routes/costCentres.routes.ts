@@ -1,7 +1,7 @@
 // src/routes/costCentres.routes.ts
 
 import { Router } from 'express'
-import { costCentresController } from '../controllers/costCentres.controller'
+import { costCentresController, constanciaUpload } from '../controllers/costCentres.controller'
 import { authenticateToken } from '../middlewares/auth.middleware'
 import { requirePermission } from '../middlewares/permissions.middleware'
 
@@ -31,6 +31,12 @@ router.get('/', requirePermission('cost_centres:read'), costCentresController.ge
  * Note: clientId is obtained from the authenticated user
  */
 router.post('/', requirePermission('cost_centres:create'), costCentresController.createCostCentre)
+
+/**
+ * POST /api/cost-centres/parse-constancia
+ * Parse a Constancia de Situación Fiscal PDF and extract fiscal data
+ */
+router.post('/parse-constancia', authenticateToken, constanciaUpload.single('file'), costCentresController.parseConstancia)
 
 /**
  * GET /api/cost-centres/:id

@@ -87,6 +87,7 @@ interface ICostCentre {
   cashManagementEnabled: boolean
   disabled: boolean
   cluster?: mongoose.Types.ObjectId | mongoose.HydratedDocument<clustersModels.ICluster>
+  lastModifiedBy?: mongoose.Types.ObjectId
 
   // Virtuals
   concentrationAccount: mongoose.HydratedDocument<accountsModels.IInternalAccount>
@@ -274,6 +275,10 @@ const costCentreSchema = new mongoose.Schema<ICostCentre, CostCentreModel>({
   cluster: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Cluster'
+  },
+  lastModifiedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   }
 }, {
   methods: {

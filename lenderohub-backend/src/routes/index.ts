@@ -23,6 +23,11 @@ import beneficiaryClusterRoutes from './beneficiaryClusters.routes';
 import registrationRoutes from './registration.routes';
 import hubController from '../controllers/hub.controller';
 import healthController from '../controllers/health.controller';
+import notesRoutes from './notes.routes';
+import activityLogRoutes from './activity-log.routes';
+import playgroundStatsController from '../controllers/playground-stats.controller';
+import ticketsRoutes from './tickets.routes';
+import announcementsRoutes from './announcements.routes';
 
 const router = Router();
 
@@ -31,6 +36,7 @@ router.use('/mock-finco', mockFincoRoutes);
 
 // Ruta de salud (public, no auth required)
 router.get('/health', healthController.getHealth);
+router.get('/health/detailed', healthController.getDetailedHealth);
 
 // ========== HUB (Dashboard) ==========
 router.get('/hub/balance', hubController.getHubBalance);
@@ -86,7 +92,22 @@ router.use('/mass-transfers', massTransferRoutes);
 // ========== Beneficiary Clusters ==========
 router.use('/beneficiary-clusters', beneficiaryClusterRoutes);
 
+// ========== Notes ==========
+router.use('/notes', notesRoutes);
+
 // ========== Registration ==========
 router.use('/', registrationRoutes);
+
+// ...
+router.use('/activity-log', activityLogRoutes);
+
+// ...
+router.get('/dashboard/playground-stats', playgroundStatsController.getStats);
+
+// ...
+router.use('/tickets', ticketsRoutes);
+
+// ...
+router.use('/announcements', announcementsRoutes);
 
 export default router;

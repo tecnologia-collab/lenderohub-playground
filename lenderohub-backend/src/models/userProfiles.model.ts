@@ -133,6 +133,7 @@ export interface IUserProfile extends mongoose.Document {
   user: mongoose.Types.ObjectId | mongoose.Document
   isActive: boolean
   permissions?: Record<string, boolean>
+  lastModifiedBy?: mongoose.Types.ObjectId
   createdAt: Date
   updatedAt: Date
 
@@ -158,6 +159,10 @@ const userProfileSchema = new mongoose.Schema<IUserProfile, UserProfileModel>({
     type: Boolean,
     required: true,
     default: true
+  },
+  lastModifiedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   }
 }, {
   collection: 'userProfiles',

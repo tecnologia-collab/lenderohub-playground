@@ -7,6 +7,7 @@ export interface IMassTransaction extends mongoose.Document {
   status: string;
   transactions: mongoose.Types.ObjectId[];
   createdBy: mongoose.Types.ObjectId;
+  lastModifiedBy?: mongoose.Types.ObjectId;
 }
 
 const schema = new mongoose.Schema({
@@ -15,7 +16,8 @@ const schema = new mongoose.Schema({
   transactionCount: { type: Number, required: true },
   status: { type: String, enum: ['pending', 'processing', 'completed', 'failed'], default: 'pending' },
   transactions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Transaction' }],
-  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
+  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  lastModifiedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
 }, { timestamps: true });
 
 export const MassTransaction = mongoose.model<IMassTransaction>('MassTransaction', schema);

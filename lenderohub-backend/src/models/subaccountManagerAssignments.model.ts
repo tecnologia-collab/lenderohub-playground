@@ -17,6 +17,7 @@ export interface ISubaccountManagerAssignment extends mongoose.Document {
   account: mongoose.Types.ObjectId | mongoose.HydratedDocument<IInternalAccount>
   isActive: boolean
   permissions: ISubaccountManagerAssignmentPermissions
+  lastModifiedBy?: mongoose.Types.ObjectId
   createdAt: Date
   updatedAt: Date
 }
@@ -52,6 +53,10 @@ const subaccountManagerAssignmentSchema = new mongoose.Schema<ISubaccountManager
       type: Boolean,
       default: true
     }
+  },
+  lastModifiedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   }
 }, {
   collection: 'subaccountManagerAssignments',

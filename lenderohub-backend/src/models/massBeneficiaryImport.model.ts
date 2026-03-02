@@ -61,6 +61,7 @@ export interface IMassBeneficiaryImport extends mongoose.Document {
   successCount: number;
   failCount: number;
   rows: IMassBeneficiaryRow[];
+  lastModifiedBy?: mongoose.Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -98,7 +99,8 @@ const massBeneficiaryImportSchema = new mongoose.Schema<IMassBeneficiaryImport>(
   invalidRows: { type: Number, required: true, default: 0 },
   successCount: { type: Number, required: true, default: 0 },
   failCount: { type: Number, required: true, default: 0 },
-  rows: [massBeneficiaryRowSchema]
+  rows: [massBeneficiaryRowSchema],
+  lastModifiedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
 }, {
   collection: 'massBeneficiaryImports',
   timestamps: true

@@ -44,14 +44,14 @@ export const accountsService = {
    * Get the centralized (HUB) account balance
    */
   async getHubBalance(): Promise<AccountBalance> {
-    return api.get<AccountBalance>('/v1/hub/balance');
+    return api.get<AccountBalance>('/hub/balance');
   },
 
   /**
    * Get all accounts for the client
    */
   async getAccounts(): Promise<Account[]> {
-    const response = await api.get<{ data: Account[] }>('/v1/accounts');
+    const response = await api.get<{ data: Account[] }>('/accounts');
     return response.data;
   },
 
@@ -59,7 +59,7 @@ export const accountsService = {
    * Get available source accounts for transfers
    */
   async getTransferSources(): Promise<TransferSourceAccount[]> {
-    const response = await api.get<{ data: TransferSourceAccount[] }>('/v1/accounts/transfer-sources');
+    const response = await api.get<{ data: TransferSourceAccount[] }>('/accounts/transfer-sources');
     return response.data || [];
   },
 
@@ -67,42 +67,42 @@ export const accountsService = {
    * Get a specific account by ID
    */
   async getAccount(accountId: string): Promise<Account> {
-    return api.get<Account>(`/v1/accounts/${accountId}`);
+    return api.get<Account>(`/accounts/${accountId}`);
   },
 
   /**
    * Get account movements with filters
    */
   async getMovements(params?: GetMovementsParams): Promise<PaginatedResponse<AccountMovement>> {
-    return api.get<PaginatedResponse<AccountMovement>>('/v1/hub/movements', params as any);
+    return api.get<PaginatedResponse<AccountMovement>>('/hub/movements', params as any);
   },
 
   /**
    * Get balance history for charts
    */
   async getBalanceHistory(days: number = 7): Promise<BalanceHistoryPoint[]> {
-    return api.get<BalanceHistoryPoint[]>('/v1/hub/balance-history', { days });
+    return api.get<BalanceHistoryPoint[]>('/hub/balance-history', { days });
   },
 
   /**
    * Get dashboard statistics
    */
   async getDashboardStats(): Promise<DashboardStats> {
-    return api.get<DashboardStats>('/v1/dashboard/stats');
+    return api.get<DashboardStats>('/dashboard/stats');
   },
 
   /**
    * Get dashboard operations metrics
    */
   async getDashboardOperations(): Promise<DashboardOperations> {
-    return api.get<DashboardOperations>('/v1/dashboard/operations');
+    return api.get<DashboardOperations>('/dashboard/operations');
   },
 
   /**
    * Sync balance with Finco (manual reconciliation)
    */
   async syncBalance(): Promise<AccountBalance> {
-    return api.post<AccountBalance>('/v1/hub/sync');
+    return api.post<AccountBalance>('/hub/sync');
   },
 };
 

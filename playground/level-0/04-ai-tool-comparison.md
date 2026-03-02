@@ -47,12 +47,12 @@ Llena esta tabla:
 
 | Tarea | Claude Code | Cursor | Mejor para... |
 |-------|------------|--------|---------------|
-| Explorar codebase | | | |
-| Editar un archivo | | | |
-| Crear archivo nuevo | | | |
-| Debugging | | | |
-| Refactoring multi-archivo | | | |
-| Autocompletado al escribir | | | |
+| Explorar codebase | |Cursor 
+| Editar un archivo | |Claude Code 
+| Crear archivo nuevo |Claude Code 
+| Debugging | |Cursor
+| Refactoring multi-archivo | |Claude Code 
+| Autocompletado al escribir | |Cursor 
 
 ## Criterios de Aceptacion
 - [ ] Completaste al menos 3 tareas con Claude Code

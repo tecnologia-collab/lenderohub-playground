@@ -55,7 +55,7 @@ export const massBeneficiaryService = {
     formData.append('costCentreId', costCentreId);
 
     const response = await api.post<{ data: MassBeneficiaryImport }>(
-      '/v1/mass-beneficiaries/upload',
+      '/mass-beneficiaries/upload',
       formData
     );
     return response.data;
@@ -66,7 +66,7 @@ export const massBeneficiaryService = {
    */
   async confirm(id: string): Promise<MassBeneficiaryImport> {
     const response = await api.post<{ data: MassBeneficiaryImport }>(
-      `/v1/mass-beneficiaries/${id}/confirm`
+      `/mass-beneficiaries/${id}/confirm`
     );
     return response.data;
   },
@@ -76,7 +76,7 @@ export const massBeneficiaryService = {
    */
   async getById(id: string): Promise<MassBeneficiaryImport> {
     const response = await api.get<{ data: MassBeneficiaryImport }>(
-      `/v1/mass-beneficiaries/${id}`
+      `/mass-beneficiaries/${id}`
     );
     return response.data;
   },
@@ -92,7 +92,7 @@ export const massBeneficiaryService = {
     const response = await api.get<{
       data: MassBeneficiaryImport[];
       total: number;
-    }>('/v1/mass-beneficiaries', { costCentreId, page, limit });
+    }>('/mass-beneficiaries', { costCentreId, page, limit });
     return response;
   },
 };

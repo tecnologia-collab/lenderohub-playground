@@ -252,21 +252,21 @@ export const usersService = {
     if (params?.page) queryParams.page = params.page;
     if (params?.limit) queryParams.limit = params.limit;
 
-    return api.get<UsersResponse>('/v1/users', queryParams);
+    return api.get<UsersResponse>('/users', queryParams);
   },
 
   /**
    * Update own profile (PUT /v1/users/me)
    */
   async updateMe(data: { firstName?: string; lastName?: string; secondLastName?: string; phone?: string }): Promise<UserResponse> {
-    return api.put<UserResponse>('/v1/users/me', data);
+    return api.put<UserResponse>('/users/me', data);
   },
 
   /**
    * Get a single user by ID
    */
   async getUser(userId: string): Promise<UserResponse> {
-    return api.get<UserResponse>(`/v1/users/${userId}`);
+    return api.get<UserResponse>(`/users/${userId}`);
   },
 
   /**
@@ -281,65 +281,65 @@ export const usersService = {
         financialStatementFile: commissionDocuments.financialStatementFile,
         proofOfAddressFile: commissionDocuments.proofOfAddressFile,
       };
-      return api.post<UserResponse>('/v1/users', toFormData(payload));
+      return api.post<UserResponse>('/users', toFormData(payload));
     }
-    return api.post<UserResponse>('/v1/users', data);
+    return api.post<UserResponse>('/users', data);
   },
 
   /**
    * Update a user
    */
   async updateUser(userId: string, data: UpdateUserRequest): Promise<UserResponse> {
-    return api.put<UserResponse>(`/v1/users/${userId}`, data);
+    return api.put<UserResponse>(`/users/${userId}`, data);
   },
 
   /**
    * Deactivate a user
    */
   async deactivateUser(userId: string): Promise<UserResponse> {
-    return api.post<UserResponse>(`/v1/users/${userId}/deactivate`);
+    return api.post<UserResponse>(`/users/${userId}/deactivate`);
   },
 
   /**
    * Reactivate a user
    */
   async reactivateUser(userId: string): Promise<UserResponse> {
-    return api.post<UserResponse>(`/v1/users/${userId}/reactivate`);
+    return api.post<UserResponse>(`/users/${userId}/reactivate`);
   },
 
   /**
    * Reset user's 2FA
    */
   async reset2FA(userId: string): Promise<UserResponse> {
-    return api.post<UserResponse>(`/v1/users/${userId}/reset-2fa`);
+    return api.post<UserResponse>(`/users/${userId}/reset-2fa`);
   },
 
   /**
    * Reset user's password
    */
   async resetPassword(userId: string): Promise<ResetPasswordResponse> {
-    return api.post<ResetPasswordResponse>(`/v1/users/${userId}/reset-password`);
+    return api.post<ResetPasswordResponse>(`/users/${userId}/reset-password`);
   },
 
   /**
    * Get user statistics
    */
   async getStats(): Promise<UserStatsResponse> {
-    return api.get<UserStatsResponse>('/v1/users/stats');
+    return api.get<UserStatsResponse>('/users/stats');
   },
 
   /**
    * Get roles the current user can create
    */
   async getCreatableRoles(): Promise<RolesResponse> {
-    return api.get<RolesResponse>('/v1/users/roles', { _ts: Date.now() });
+    return api.get<RolesResponse>('/users/roles', { _ts: Date.now() });
   },
 
   /**
    * Find user by email (onboarding flow)
    */
   async findByEmail(email: string): Promise<FindByEmailResponse> {
-    return api.post<FindByEmailResponse>('/v1/users/find-by-email', { email });
+    return api.post<FindByEmailResponse>('/users/find-by-email', { email });
   },
 
   /**
@@ -354,9 +354,9 @@ export const usersService = {
         financialStatementFile: commissionDocuments.financialStatementFile,
         proofOfAddressFile: commissionDocuments.proofOfAddressFile,
       };
-      return api.post<UserResponse>(`/v1/users/${userId}/assign-role`, toFormData(payload));
+      return api.post<UserResponse>(`/users/${userId}/assign-role`, toFormData(payload));
     }
-    return api.post<UserResponse>(`/v1/users/${userId}/assign-role`, data);
+    return api.post<UserResponse>(`/users/${userId}/assign-role`, data);
   },
 
   /**
@@ -367,7 +367,7 @@ export const usersService = {
       ...(costCentreId ? { costCentreId } : {}),
       _ts: Date.now(),
     };
-    return api.get<UserFormOptionsResponse>('/v1/users/form-options', params);
+    return api.get<UserFormOptionsResponse>('/users/form-options', params);
   },
 
   /**

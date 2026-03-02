@@ -11,6 +11,7 @@ import { AuthRequest } from '../middlewares/auth.middleware';
 import { CostCentre } from '../models/providerAccounts.model';
 import { InternalAccount } from '../models/accounts.model';
 import { UserBeneficiary } from '../models/userBeneficiaries.model';
+import { Beneficiary } from '../models/beneficiaries.model';
 import {
   BeneficiaryVerification,
   VerificationStatus
@@ -257,10 +258,9 @@ export const beneficiariesController = {
       console.log('🔍 Iniciando penny validation para instrumento:', id);
 
       // 1. Verify the instrument exists in Finco
-      let instrument: any;
       try {
-        instrument = await fincoClient.getInstrument(id);
-      } catch (err: any) {
+        await fincoClient.getInstrument(id);
+} catch (err: any) {
         return res.status(404).json({
           success: false,
           error: 'Beneficiary not found',
@@ -387,6 +387,31 @@ export const beneficiariesController = {
       return res.status(error.status || 500).json({
         success: false,
         error: 'Failed to get verification status',
+        message: error.message,
+      });
+    }
+  },
+
+  /**
+   * PUT /api/v1/beneficiaries/:id/audit
+   * Update audit info (lastModifiedBy) for a beneficiary
+   */
+  async updateAuditInfo(req: AuthRequest, res: Response) {
+    try {
+      const userId = req.user._id;
+      const beneficiary = await Beneficiary.findByIdAndUpdate(req.params.id, {
+        lastModifiedBy: userId,
+        updatedAt: new Date(),
+      });
+      return res.json({
+        success: true,
+        data: beneficiary,
+      });
+    } catch (error: any) {
+      console.error('❌ Error updating audit info:', error.message);
+      return res.status(500).json({
+        success: false,
+        error: 'Failed to update audit information',
         message: error.message,
       });
     }

@@ -15,6 +15,7 @@ export interface ICommissionAgentAssignment extends mongoose.Document {
   transferInCommissionPercentage: number
   isEnabled: boolean
   assignedAt?: Date
+  lastModifiedBy?: mongoose.Types.ObjectId
   createdAt: Date
   updatedAt: Date
 }
@@ -49,6 +50,10 @@ const commissionAgentAssignmentSchema = new mongoose.Schema<ICommissionAgentAssi
   },
   assignedAt: {
     type: Date
+  },
+  lastModifiedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   }
 }, {
   collection: 'commissionAgentAssignments',

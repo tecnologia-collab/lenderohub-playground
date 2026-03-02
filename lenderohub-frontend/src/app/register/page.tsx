@@ -152,7 +152,7 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      await api.post('/v1/register', {
+      await api.post('/register', {
         companyName: formData.companyName.trim(),
         rfc: formData.rfc.trim().toUpperCase(),
         businessType: formData.businessType,

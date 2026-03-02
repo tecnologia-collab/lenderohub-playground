@@ -85,7 +85,7 @@ class UserProfilesService {
       return this.metadataCache
     }
 
-    const response = await api.get<{ success: boolean; data: ProfileMetadata }>('/v1/metadata')
+    const response = await api.get<{ success: boolean; data: ProfileMetadata }>('/metadata')
     if (response.success) {
       this.metadataCache = response.data
     }
@@ -104,7 +104,7 @@ class UserProfilesService {
    */
   async getProfilesForUser(userId: string): Promise<UserProfile[]> {
     const response = await api.get<{ success: boolean; data: UserProfile[] }>(
-      `/v1/users/${userId}/profiles`
+      `/users/${userId}/profiles`
     )
     return response.data
   }
@@ -114,7 +114,7 @@ class UserProfilesService {
    */
   async createProfile(userId: string, data: CreateProfileRequest): Promise<UserProfile> {
     const response = await api.post<{ success: boolean; data: UserProfile }>(
-      `/v1/users/${userId}/profiles`,
+      `/users/${userId}/profiles`,
       data
     )
     return response.data
@@ -125,7 +125,7 @@ class UserProfilesService {
    */
   async getProfilePermissions(profileId: string): Promise<ProfilePermissionsResponse> {
     const response = await api.get<{ success: boolean; data: ProfilePermissionsResponse }>(
-      `/v1/profiles/${profileId}/permissions`
+      `/profiles/${profileId}/permissions`
     )
     return response.data
   }
@@ -138,7 +138,7 @@ class UserProfilesService {
     permissions: Record<string, boolean>
   ): Promise<UserProfile> {
     const response = await api.put<{ success: boolean; data: UserProfile }>(
-      `/v1/profiles/${profileId}/permissions`,
+      `/profiles/${profileId}/permissions`,
       { permissions }
     )
     return response.data
@@ -149,7 +149,7 @@ class UserProfilesService {
    */
   async setAllPermissions(profileId: string, value: boolean): Promise<UserProfile> {
     const response = await api.post<{ success: boolean; data: UserProfile }>(
-      `/v1/profiles/${profileId}/permissions/set-all`,
+      `/profiles/${profileId}/permissions/set-all`,
       { value }
     )
     return response.data
@@ -160,7 +160,7 @@ class UserProfilesService {
    */
   async getProfile(profileId: string): Promise<UserProfile> {
     const response = await api.get<{ success: boolean; data: UserProfile }>(
-      `/v1/profiles/${profileId}`
+      `/profiles/${profileId}`
     )
     return response.data
   }
@@ -170,7 +170,7 @@ class UserProfilesService {
    */
   async deactivateProfile(profileId: string): Promise<UserProfile> {
     const response = await api.delete<{ success: boolean; data: UserProfile }>(
-      `/v1/profiles/${profileId}`
+      `/profiles/${profileId}`
     )
     return response.data
   }
@@ -180,7 +180,7 @@ class UserProfilesService {
    */
   async reactivateProfile(profileId: string): Promise<UserProfile> {
     const response = await api.post<{ success: boolean; data: UserProfile }>(
-      `/v1/profiles/${profileId}/reactivate`
+      `/profiles/${profileId}/reactivate`
     )
     return response.data
   }
@@ -193,7 +193,7 @@ class UserProfilesService {
     settings: Record<string, boolean>
   ): Promise<UserProfile> {
     const response = await api.put<{ success: boolean; data: UserProfile }>(
-      `/v1/profiles/${profileId}/settings`,
+      `/profiles/${profileId}/settings`,
       { settings }
     )
     return response.data

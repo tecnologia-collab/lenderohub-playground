@@ -8,6 +8,7 @@ export interface IUserSettings extends mongoose.Document {
     push: boolean;
   };
   preferences: Map<string, any>;
+  lastModifiedBy?: mongoose.Types.ObjectId;
 }
 
 const userSettingsSchema = new mongoose.Schema({
@@ -17,7 +18,8 @@ const userSettingsSchema = new mongoose.Schema({
     sms: { type: Boolean, default: false },
     push: { type: Boolean, default: false }
   },
-  preferences: { type: Map, of: mongoose.Schema.Types.Mixed }
+  preferences: { type: Map, of: mongoose.Schema.Types.Mixed },
+  lastModifiedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
 }, { timestamps: true });
 
 export const UserSettings = mongoose.model<IUserSettings>('UserSettings', userSettingsSchema);

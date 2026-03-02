@@ -16,6 +16,7 @@ export interface ICashManagementAssignment extends mongoose.Document {
   account: mongoose.Types.ObjectId | mongoose.HydratedDocument<accountsModels.IVirtualBagAccount>
   isActive: boolean
   permissions: ICashManagementAssignmentPermissions
+  lastModifiedBy?: mongoose.Types.ObjectId
   createdAt: Date
   updatedAt: Date
 }
@@ -47,6 +48,10 @@ const cashManagementAssignmentSchema = new mongoose.Schema<ICashManagementAssign
       type: Boolean,
       default: true
     }
+  },
+  lastModifiedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   }
 }, {
   collection: 'cashManagementAssignments',

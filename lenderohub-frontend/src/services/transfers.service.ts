@@ -182,7 +182,7 @@ export const transfersService = {
       beneficiary_email: request.beneficiaryEmail,
     };
 
-    return api.request<MoneyOutResponse>('POST', '/v1/transactions/money-out', {
+    return api.request<MoneyOutResponse>('POST', '/transactions/money-out', {
       body: requestBody as any,
     });
   },
@@ -199,7 +199,7 @@ export const transfersService = {
       total_pages?: number;
     };
   }> {
-    const response = await api.get<{ data: Transaction[]; pagination?: any }>('/v1/transactions', params as any);
+    const response = await api.get<{ data: Transaction[]; pagination?: any }>('/transactions', params as any);
     return {
       data: response.data || [],
       pagination: response.pagination || {},
@@ -210,7 +210,7 @@ export const transfersService = {
    * Get recent transactions (for dashboard)
    */
   async getRecentTransactions(limit: number = 10): Promise<Transaction[]> {
-    const response = await api.get<{ data: Transaction[] }>('/v1/transactions/recent', { limit });
+    const response = await api.get<{ data: Transaction[] }>('/transactions/recent', { limit });
     return response.data || [];
   },
 
@@ -218,7 +218,7 @@ export const transfersService = {
    * Get a specific transaction by ID
    */
   async getTransaction(transactionId: string): Promise<Transaction> {
-    const response = await api.get<{ data: Transaction }>(`/v1/transactions/${transactionId}`);
+    const response = await api.get<{ data: Transaction }>(`/transactions/${transactionId}`);
     return response.data;
   },
 
@@ -226,14 +226,14 @@ export const transfersService = {
    * Track transaction status by tracking ID
    */
   async trackTransaction(trackingId: string): Promise<Transaction> {
-    return api.get<Transaction>('/v1/transactions/track', { trackingId });
+    return api.get<Transaction>('/transactions/track', { trackingId });
   },
 
   /**
    * Cancel a pending transaction
    */
   async cancelTransaction(transactionId: string): Promise<Transaction> {
-    return api.post<Transaction>(`/v1/transactions/${transactionId}/cancel`);
+    return api.post<Transaction>(`/transactions/${transactionId}/cancel`);
   },
 
   /**
@@ -246,7 +246,7 @@ export const transfersService = {
     failed: number;
     totalAmount: number;
   }> {
-    return api.get('/v1/transactions/stats', { startDate, endDate });
+    return api.get('/transactions/stats', { startDate, endDate });
   },
 };
 
