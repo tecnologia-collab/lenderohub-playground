@@ -12,7 +12,7 @@ import { AuthRequest } from '../middlewares/auth.middleware'
 import { CostCentreAccumulator } from '../models/costCentreAccumulators.model'
 import { dayjs } from '../utils/dayjs'
 import multer from 'multer'
-import { PDFParse } from 'pdf-parse'
+import pdfParse from 'pdf-parse'
 
 export const constanciaUpload = multer({
   storage: multer.memoryStorage(),
@@ -479,8 +479,7 @@ export const costCentresController = {
   parseConstancia: async (req: Request, res: Response) => {
     try {
       if (!req.file) return res.status(400).json({ success: false, message: 'No se recibió ningún archivo PDF' });
-      const parser = new PDFParse({ data: req.file.buffer });
-      const parsed = await parser.getText();
+      const parsed = await pdfParse(req.file.buffer);
       const fields = parseConstanciaText(parsed.text);
       if (!fields.rfc) return res.status(422).json({ success: false, message: 'No se pudo extraer información. Verifica que sea una Constancia del SAT.' });
       return res.status(200).json({ success: true, data: fields });
