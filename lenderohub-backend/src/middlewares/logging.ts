@@ -24,16 +24,6 @@ export const logger = winston.createLogger({
   ]
 });
 
-// Si estamos en producción, también escribir a archivo
-if (process.env.NODE_ENV === 'production') {
-  logger.add(new winston.transports.File({ 
-    filename: 'logs/error.log', 
-    level: 'error' 
-  }));
-  logger.add(new winston.transports.File({ 
-    filename: 'logs/combined.log' 
-  }));
-}
 
 // Helper function para errores - VERSIÓN CORREGIDA
 export function logError(error: any): void {
